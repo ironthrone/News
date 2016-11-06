@@ -45,11 +45,11 @@ public class NewsLoader extends CursorLoader {
         }
 
         if (mRefresh ) {
-                return loadFromRemote();
+                return fetchFromRemote();
 
         }
         if(mDBIsEmpty){
-            cursor = loadFromRemote();
+            cursor = fetchFromRemote();
         }else {
             cursor = loadFromLocal();
         }
@@ -75,7 +75,7 @@ public class NewsLoader extends CursorLoader {
         return cursor;
     }
 
-    private Cursor loadFromRemote() {
+    private Cursor fetchFromRemote() {
         Cursor cursor = null;
             Service service = ServiceGenerator.generate(Service.class);
             try {

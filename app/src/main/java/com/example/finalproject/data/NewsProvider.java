@@ -234,7 +234,7 @@ break;
                 throw new UnsupportedOperationException("Unknown uri:" + uri);
 
         }
-        return 0;
+        return updatedRow;
     }
 
     private static String getPageLimit(int page) {
