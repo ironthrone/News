@@ -19,7 +19,9 @@
         </activity>
         <provider
             android:authorities="com.guo.news"
+
             android:name=".data.local.NewsProvider"
+
             android:exported="true"
             android:readPermission="com.guo.news.provider.READ"/>
     </application>
