@@ -19,19 +19,11 @@ import retrofit2.http.POST;
  */
 public interface Service {
 
-<<<<<<< HEAD
-    @GET(ServiceConstant.CHANNEL_PATH)
+    @GET(ServiceHost.CHANNEL_PATH)
     Call<ResultModel<ChannelListModel>> getChannelList();
 
     @FormUrlEncoded
-    @POST(ServiceConstant.NEWS_PATH)
-=======
-    @GET(RestConstant.CHANNEL_PATH)
-    Call<ResultModel<ChannelListModel>> getChannelList();
-
-    @FormUrlEncoded
-    @POST(RestConstant.NEWS_PATH)
->>>>>>> 7a0cf304b6fdf772dcbd00efaf252e2b09cb1f50
+    @POST(ServiceHost.NEWS_PATH)
     Call<ResultModel<PageModel>> getNewsFromChannel(@Field("channelId") String channelId,
                                                     @Field("page") Integer page,
                                                     @Field("maxResult") Integer maxItem);
