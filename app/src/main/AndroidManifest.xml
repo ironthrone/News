@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.finalproject">
+    package="com.guo.news">
 
     <permission
         android:name="com.guo.news.provider.READ" />
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name="com.guo.com.guo.news.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +20,7 @@
         <provider
             android:authorities="com.guo.news"
 
-            android:name=".data.local.NewsProvider"
+            android:name="com.guo.com.guo.news.data.local.NewsProvider"
 
             android:exported="true"
             android:readPermission="com.guo.news.provider.READ"/>
