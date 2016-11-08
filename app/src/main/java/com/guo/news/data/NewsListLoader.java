@@ -111,16 +111,16 @@ public class NewsListLoader extends CursorLoader {
         for (NewsModel newsModel : newsList) {
 
             ContentValues cv = new ContentValues();
-            cv.put(ContentEntity.TITLE,newsModel.title);
+            cv.put(ContentEntity.COLUMN_HEADLINE,newsModel.title);
             cv.put(ContentEntity.COLUMN_STANDFIRST,newsModel.source);
             cv.put(ContentEntity.COLUMN_SECTION_ID,newsModel.channelId);
             cv.put(ContentEntity.COLUMN_BYLINE,newsModel.channelName);
             cv.put(ContentEntity.COLUMN_WORD_COUNT,newsModel.content);
-            cv.put(ContentEntity.DESC,newsModel.desc);
+            cv.put(ContentEntity.COLUMN_BODY,newsModel.desc);
             cv.put(ContentEntity.COLUMN_BODY,newsModel.havePic);
             cv.put(ContentEntity.COLUMN_WEB_URL,newsModel.link);
             if (newsModel.imageurls.size() >= 0) {
-                cv.put(ContentEntity.MAIN_PIC,newsModel.imageurls.get(0).url);
+                cv.put(ContentEntity.COLUMN_THUMBNAIL,newsModel.imageurls.get(0).url);
             }
             if (Util.getTimeStamp(newsModel.pubDate) > 0) {
 

@@ -49,22 +49,7 @@ public class NewsContract {
         public static final String COLUMN_THUMBNAIL = "thumbnail";
         public static final String COLUMN_WORD_COUNT = "wordCount";
 
-        public static final String CREATE_NEWS_TABLE = "create table " + TABLE_NAME + "(" +
-                _ID + " integer primary key autoincrement," +
-                COLUMN_ID + " text unique not null," +
-                COLUMN_HEADLINE + " text not null," +
-                COLUMN_SECTION_ID + "text not null," +
-                COLUMN_WEB_PUBLICATION_DATE + " text not null," +
-                COLUMN_WEB_URL + " text not null," +
-                COLUMN_BYLINE + " text not null," +
-                COLUMN_BODY + " integer," +
-                COLUMN_WORD_COUNT + " text," +
-                COLUMN_THUMBNAIL + " integer not null," +
-                COLUMN_STANDFIRST + "text," +
-                " on conflict ignore" +
-                " foreign key(" + COLUMN_SECTION_ID + ") references " +
-                SectionEntity.TABLE_NAME + "(" + SectionEntity._ID + ")" +
-                ");";
+
 
         public static String getContentId(Uri uri) {
             return uri.getLastPathSegment();
@@ -92,12 +77,7 @@ public class NewsContract {
         public static final String COLUMN_WEB_TITLE = "webTitle";
 
 
-        public static final String CREATE_CHANNEL_TABLE = "create table " + TABLE_NAME + "(" +
-                _ID + " text primary key," +
-                COLUMN_ID + " text unique not null," +
-                COLUMN_WEB_TITLE + " text not null," +
-                "on conflict ignore" +
-                ");";
+
     }
 
     public static class CommentEntity implements BaseColumns {
@@ -114,16 +94,7 @@ public class NewsContract {
         public static final String COLUMN_ADD_TIME = "addTime";
 
 
-        public static final String CREATE_COMMENT_TABLE = "create table " + TABLE_NAME + "(" +
-                _ID + " integer primary key autoincrement," +
-                COLUMN_ID + "integer unique not null" +
-                COLUMN_CONTENT_ID + " integer unique not null," +
-                COLUMN_CONTENT + " text not null," +
-                COLUMN_ADD_TIME + " integer not null," +
-                "on conflict ignore " +
-                "foreign key(" + COLUMN_CONTENT_ID + ") references " +
-                ContentEntity.TABLE_NAME + "(" + ContentEntity._ID + ")" +
-                ");";
+
         public static Uri buildWithContentIDUrl(String contentId){
             return CONTENT_URI.buildUpon().appendPath(contentId).build();
         }
