@@ -19,14 +19,14 @@ import com.guo.news.data.local.NewsContract.SectionEntity;
 public class NewsProvider extends ContentProvider {
 
 
-    private static final int SECTION = 100;
+    public static final int SECTION = 100;
 
-    private static final int CONTENT = 200;
-    private static final int CONTENT_WITH_ID = 201;
-    private static final int CONTENT_WITH_SECTION = 202;
+    public static final int CONTENT = 200;
+    public static final int CONTENT_WITH_ID = 201;
+    public static final int CONTENT_WITH_SECTION = 202;
 
-    private static final int COMMENT = 300;
-    private static final int COMMENT_WITH_CONTENT = 301;
+    public static final int COMMENT = 300;
+    public static final int COMMENT_WITH_CONTENT = 301;
 
     private NewsDBOpenHelper mDatabaseHelper;
     private static final UriMatcher mUriMatcher = buildUriMatcher();
@@ -41,9 +41,13 @@ public class NewsProvider extends ContentProvider {
 
         matcher.addURI(NewsContract.CONTENT_AUTHORITY, NewsContract.PATH_SECTION, SECTION);
 
-        matcher.addURI(NewsContract.CONTENT_AUTHORITY, NewsContract.COMMENT_PATH, COMMENT);
-        matcher.addURI(NewsContract.CONTENT_AUTHORITY, NewsContract.COMMENT_PATH + "/*", COMMENT_WITH_CONTENT);
+        matcher.addURI(NewsContract.CONTENT_AUTHORITY, NewsContract.PATH_COMMENT, COMMENT);
+        matcher.addURI(NewsContract.CONTENT_AUTHORITY, NewsContract.PATH_COMMENT + "/*", COMMENT_WITH_CONTENT);
         return matcher;
+    }
+
+    public static UriMatcher getUriMatcher() {
+        return mUriMatcher;
     }
 
     @Override
@@ -84,6 +88,24 @@ public class NewsProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case SECTION:
                 cursor = mDatabaseHelper.getReadableDatabase().query(SectionEntity.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case CONTENT:
+                cursor = mDatabaseHelper.getReadableDatabase().query(ContentEntity.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case COMMENT:
+                cursor = mDatabaseHelper.getReadableDatabase().query(CommentEntity.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -164,7 +186,7 @@ public class NewsProvider extends ContentProvider {
                 if (insertedId > 0) {
                     returnUri = ContentEntity.CONTENT_URI.buildUpon().appendPath(String.valueOf(insertedId)).build();
                 } else {
-                    throw new SQLException("Fail to inset to section " + uri);
+                    throw new SQLException("Fail to inset to content " + uri);
 
                 }
                 break;
@@ -175,7 +197,7 @@ public class NewsProvider extends ContentProvider {
                 if (insertedId > 0) {
                     returnUri = CommentEntity.CONTENT_URI.buildUpon().appendPath(String.valueOf(insertedId)).build();
                 } else {
-                    throw new SQLException("Fail to inset to section " + uri);
+                    throw new SQLException("Fail to inset to comment " + uri);
                 }
                 break;
             default:

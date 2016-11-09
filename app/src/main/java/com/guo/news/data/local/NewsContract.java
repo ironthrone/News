@@ -13,7 +13,7 @@ public class NewsContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_SECTION = "section";
-    public static final String COMMENT_PATH = "comment";
+    public static final String PATH_COMMENT = "comment";
     public static final String PATH_CONTENT = "content";
 
 
@@ -31,7 +31,7 @@ public class NewsContract {
 
     public static class ContentEntity implements BaseColumns {
 
-        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SECTION);
+        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_CONTENT);
         public static final String CONTENT_TYPE = getContentType(PATH_SECTION);
         public static final String CONTENT_ITEM_TYPE = getContentItemType(PATH_SECTION);
 
@@ -66,7 +66,7 @@ public class NewsContract {
     }
 
     public static class SectionEntity implements BaseColumns {
-        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_CONTENT);
+        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SECTION);
 
         public static final String CONTENT_TYPE = getContentType(PATH_SECTION);
         public static final String CONTENT_ITEM_TYPE = getContentItemType(PATH_SECTION);
@@ -81,10 +81,10 @@ public class NewsContract {
     }
 
     public static class CommentEntity implements BaseColumns {
-        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, COMMENT_PATH);
+        public static Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_COMMENT);
 
-        public static final String CONTENT_TYPE = getContentType(COMMENT_PATH);
-        public static final String CONTENT_ITEM_TYPE = getContentItemType(COMMENT_PATH);
+        public static final String CONTENT_TYPE = getContentType(PATH_COMMENT);
+        public static final String CONTENT_ITEM_TYPE = getContentItemType(PATH_COMMENT);
 
         public static final String TABLE_NAME = "comment";
 
