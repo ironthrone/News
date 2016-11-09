@@ -36,7 +36,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 ContentEntity.COLUMN_STANDFIRST + "text," +
                 " on conflict ignore" +
                 " foreign key(" + ContentEntity.COLUMN_SECTION_ID + ") references " +
-                SectionEntity.TABLE_NAME + "(" + SectionEntity._ID + ")" +
+                SectionEntity.TABLE_NAME + "(" + SectionEntity.COLUMN_ID + ")" +
                 ");";
         final String CREATE_COMMENT_TABLE = "create table " + CommentEntity.TABLE_NAME + "(" +
                 CommentEntity._ID + " integer primary key autoincrement," +
@@ -46,7 +46,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 CommentEntity.COLUMN_ADD_TIME + " integer not null," +
                 "on conflict ignore " +
                 "foreign key(" + CommentEntity.COLUMN_CONTENT_ID + ") references " +
-                ContentEntity.TABLE_NAME + "(" + ContentEntity._ID + ")" +
+                ContentEntity.TABLE_NAME + "(" + ContentEntity.COLUMN_ID + ")" +
                 ");";
 
         final String CREATE_SECTION_TABLE = "create table " + SectionEntity.TABLE_NAME + "(" +
