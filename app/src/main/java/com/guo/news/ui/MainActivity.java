@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         setSupportActionBar(toolbar);
 
-        tab_layout.setupWithViewPager(view_pager);
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
     }
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mNewsFragmentPagerAdapter = new NewsFragmentPagerAdapter(getSupportFragmentManager(), data);
         view_pager.setAdapter(mNewsFragmentPagerAdapter);
+        tab_layout.setupWithViewPager(view_pager);
 
     }
 
