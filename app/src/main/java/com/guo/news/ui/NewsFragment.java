@@ -15,24 +15,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.guo.news.R;
-import com.guo.news.data.local.NewsContract;
+import com.guo.news.data.local.NewsContract.ContentEntity;
+import com.guo.news.data.model.ContentModel;
+import com.guo.news.data.remote.ResultTransformer;
+import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
+import com.guo.news.util.DateUtils;
+import com.guo.news.util.Utility;
+import com.guo.news.widget.LinearLoadMoreScrollListener;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor>{
+        LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private static final String KEY_SECTION_ID = "section_id";
     private static final String TAG = NewsFragment.class.getSimpleName();
     private static final int LOADER_CONTENT = 100;
+    private static final String DATE_TEMPLE = "yyyy-MM-dd";
     private String mSectionId;
 
     @Bind(R.id.swipe_refresh)
@@ -40,11 +54,50 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Bind(R.id.recycler_view)
     RecyclerView recycler_view;
     private NewsListAdapter mAdapter;
+    private boolean mFirstLoaded = true;
+    /**
+     * last item's date in cp
+     */
+    private String mLastDateInCP;
+
+    private LinearLoadMoreScrollListener mLoadMoreListener = new LinearLoadMoreScrollListener() {
+        @Override
+        public void loadMore(int page) {
+            ServiceHost.getService().getContentFromSection(mSectionId, page, 10, null, mLastDateInCP)
+                    .map(new ResultTransformer<List<ContentModel>>())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<ContentModel>>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNext(List<ContentModel> contentModels) {
+                            if (contentModels.size() == 0) {
+                                Toast.makeText(getContext(), "there is'nt  value", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (saveContentModels(contentModels) < 0) {
+                                Log.d(TAG, "load more insert fail");
+                            }
+                        }
+                    });
+
+        }
+    };
+    private int mRefreshPage = 1;
 
     public static NewsFragment getInstance(String sectionId) {
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_SECTION_ID,sectionId);
+        args.putString(KEY_SECTION_ID, sectionId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,6 +109,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if (mSectionId == null) {
             Log.d(TAG, "section id is null ");
         }
+        mLastDateInCP = DateUtils.format(System.currentTimeMillis(), DATE_TEMPLE);
     }
 
     @Override
@@ -67,12 +121,13 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ButterKnife.bind(this,getView());
+        ButterKnife.bind(this, getView());
         swipe_refresh.setOnRefreshListener(this);
 
         mAdapter = new NewsListAdapter(getContext(), null);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler_view.setAdapter(mAdapter);
+        recycler_view.addOnScrollListener(mLoadMoreListener);
 
         getLoaderManager().initLoader(LOADER_CONTENT, null, this);
     }
@@ -80,14 +135,34 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
+        ServiceHost.getService().getContentFromSection(mSectionId, mRefreshPage++, 10, null, null)
+                .map(new ResultTransformer<List<ContentModel>>())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<ContentModel>>() {
+                    @Override
+                    public void call(List<ContentModel> contentModels) {
+                        int insertedRow = saveContentModels(contentModels);
+                        if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
+                            Toast.makeText(getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
+    private int saveContentModels(List<ContentModel> contentModels) {
+        return getContext().getContentResolver().bulkInsert(ContentEntity.CONTENT_URI, Utility.convert(contentModels));
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = NewsContract.ContentEntity.COLUMN_WEB_PUBLICATION_DATE + " desc";
+        String sortOrder = ContentEntity.COLUMN_WEB_PUBLICATION_DATE + " desc";
         return new CursorLoader(getContext(),
-                NewsContract.ContentEntity.buildContentWithSectionUri(mSectionId),
+                ContentEntity.buildContentWithSectionUri(mSectionId),
                 null,
                 null,
                 null,
@@ -96,8 +171,12 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.moveToFirst()) {
-            //TODO getnewerdate
+        if (mFirstLoaded) {
+            if (data != null && data.moveToLast()) {
+                mLastDateInCP = data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE));
+                mLastDateInCP = mLastDateInCP.substring(0, DATE_TEMPLE.length());
+                mFirstLoaded = false;
+            }
         }
         mAdapter.setCursor(data);
     }

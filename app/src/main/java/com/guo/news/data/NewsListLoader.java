@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.widget.Toast;
 
 import com.guo.news.data.local.NewsContract.ContentEntity;
-import com.guo.news.data.model.NewsModel;
-import com.guo.news.data.model.PageModel;
+import com.guo.news.data.model.ContentModel;
 import com.guo.news.data.model.ResultModel;
 import com.guo.news.data.remote.Service;
 import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.util.NetworkChecker;
+import com.guo.news.util.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,9 +83,9 @@ public class NewsListLoader extends CursorLoader {
         Cursor cursor = null;
         Service service = ServiceHost.getService();
             try {
-                ResultModel<PageModel> resultModel = service.getNewsFromChannel(mChannelId, mCurrentPage, null).execute().body();
+                ResultModel<PageModel> resultModel = service.getContentFromSection(mChannelId, mCurrentPage, null).execute().body();
                 if (resultModel.showapi_res_code == 0) {
-                    ArrayList<NewsModel> newsList = resultModel.showapi_res_body.contentlist;
+                    ArrayList<ContentModel> newsList = resultModel.showapi_res_body.contentlist;
 
                     getContext().getContentResolver().bulkInsert(ContentEntity.CONTENT_URI, convertToCvs(newsList));
 
@@ -105,10 +105,10 @@ public class NewsListLoader extends CursorLoader {
     }
 
 
-    private ContentValues[] convertToCvs(ArrayList<NewsModel> newsList) {
+    private ContentValues[] convertToCvs(ArrayList<ContentModel> newsList) {
 
         ContentValues[] cvs = new ContentValues[newsList.size()];
-        for (NewsModel newsModel : newsList) {
+        for (ContentModel newsModel : newsList) {
 
             ContentValues cv = new ContentValues();
             cv.put(ContentEntity.COLUMN_HEADLINE,newsModel.title);
@@ -122,9 +122,9 @@ public class NewsListLoader extends CursorLoader {
             if (newsModel.imageurls.size() >= 0) {
                 cv.put(ContentEntity.COLUMN_THUMBNAIL,newsModel.imageurls.get(0).url);
             }
-            if (Util.getTimeStamp(newsModel.pubDate) > 0) {
+            if (Utility.getTimeStamp(newsModel.pubDate) > 0) {
 
-                cv.put(ContentEntity.COLUMN_THUMBNAIL,Util.getTimeStamp(newsModel.pubDate));
+                cv.put(ContentEntity.COLUMN_THUMBNAIL, Utility.getTimeStamp(newsModel.pubDate));
             }
 
             Arrays.fill(cvs,cv);

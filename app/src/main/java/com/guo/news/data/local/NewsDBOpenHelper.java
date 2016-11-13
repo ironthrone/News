@@ -27,7 +27,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 ContentEntity.COLUMN_ID + " text unique not null," +
                 ContentEntity.COLUMN_HEADLINE + " text not null," +
                 ContentEntity.COLUMN_SECTION_ID + " text not null," +
-                ContentEntity.COLUMN_WEB_PUBLICATION_DATE + " text not null," +
+                ContentEntity.COLUMN_WEB_PUBLICATION_DATE + " integer," +
                 ContentEntity.COLUMN_WEB_URL + " text not null," +
                 ContentEntity.COLUMN_BYLINE + " text not null," +
                 ContentEntity.COLUMN_BODY + " text not null," +

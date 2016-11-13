@@ -2,7 +2,6 @@ package com.guo.news.data.model;
 
 import com.guo.news.data.remote.Service;
 import com.guo.news.data.remote.ServiceHost;
-import com.guo.news.data.remote.TheCallback;
 
 import java.util.ArrayList;
 
