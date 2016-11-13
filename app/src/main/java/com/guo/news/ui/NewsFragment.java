@@ -84,7 +84,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 Toast.makeText(getContext(), "there is'nt  value", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            if (saveContentModels(contentModels) < 0) {
+                            if (Utility.insertContents(getContext(),contentModels) < 0) {
                                 Log.d(TAG, "load more insert fail");
                             }
                         }
@@ -141,7 +141,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 .subscribe(new Action1<List<ContentModel>>() {
                     @Override
                     public void call(List<ContentModel> contentModels) {
-                        int insertedRow = saveContentModels(contentModels);
+                        int insertedRow = Utility.insertContents(getContext(),contentModels);
                         if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
                             Toast.makeText(getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
                         }
@@ -154,9 +154,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 });
     }
 
-    private int saveContentModels(List<ContentModel> contentModels) {
-        return getContext().getContentResolver().bulkInsert(ContentEntity.CONTENT_URI, Utility.convert(contentModels));
-    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

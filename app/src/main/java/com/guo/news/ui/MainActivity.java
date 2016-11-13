@@ -1,6 +1,7 @@
 package com.guo.news.ui;
 
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.guo.news.R;
@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int SECTION_LOADER = 100;
+
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.tab_layout)
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
     }
+
 
 
     @Override
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static class NewsFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-        private  Cursor mSectionCursor;
+        private Cursor mSectionCursor;
 
         public NewsFragmentPagerAdapter(FragmentManager fm, Cursor sectionCursor) {
             super(fm);
@@ -81,11 +83,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public void removeCursor() {
             mSectionCursor = null;
         }
+
         @Override
         public Fragment getItem(int position) {
             if (mSectionCursor.moveToPosition(position)) {
 
-                return  NewsFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
+                return NewsFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
             }
             return null;
         }
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         @Override
         public CharSequence getPageTitle(int position) {
             if (mSectionCursor.moveToPosition(position)) {
-                return  mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_WEB_TITLE));
+                return mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_WEB_TITLE));
             }
             return super.getPageTitle(position);
         }
