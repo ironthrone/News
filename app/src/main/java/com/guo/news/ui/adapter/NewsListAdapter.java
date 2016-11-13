@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.ContentEntity;
-import com.guo.news.widget.RecyclerViewCursorAdapter;
+import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;

@@ -25,7 +25,7 @@ import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
 import com.guo.news.util.DateUtils;
 import com.guo.news.util.Utility;
-import com.guo.news.widget.LinearLoadMoreScrollListener;
+import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
 
 import java.util.List;
 

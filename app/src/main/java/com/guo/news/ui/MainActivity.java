@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
+import com.guo.news.data.remote.NewsSyncAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
+        NewsSyncAdapter.initlizeSync(getApplicationContext());
     }
 
 

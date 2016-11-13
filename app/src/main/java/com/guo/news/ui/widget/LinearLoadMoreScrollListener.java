@@ -1,4 +1,4 @@
-package com.guo.news.widget;
+package com.guo.news.ui.widget;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

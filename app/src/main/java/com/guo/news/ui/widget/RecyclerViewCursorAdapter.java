@@ -1,4 +1,4 @@
-package com.guo.news.widget;
+package com.guo.news.ui.widget;
 
 import android.content.Context;
 import android.database.Cursor;
