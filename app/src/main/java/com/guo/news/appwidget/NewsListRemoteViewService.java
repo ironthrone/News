@@ -56,6 +56,7 @@ public class NewsListRemoteViewService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
                 RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.item_app_widget);
+            //TODO add click intent
             if (mCursor != null && mCursor.moveToPosition(position)) {
 
                 String headline = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE));
