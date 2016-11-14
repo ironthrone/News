@@ -87,7 +87,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
 
-    public static void initlizeSync(Context context) {
+    public static void initializeSync(Context context) {
         Account account = new Account(context.getString(R.string.account_name), context.getString(R.string.account_type));
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         //if already add account ,ignore these code
@@ -102,8 +102,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         String AUTHORITY = NewsContract.CONTENT_AUTHORITY;
 
         ContentResolver.addPeriodicSync(account,
-                AUTHORITY,null,SYNC_INTERVAL);
+                AUTHORITY,new Bundle(),SYNC_INTERVAL);
 
+        //set account is syncable
+        ContentResolver.setIsSyncable(account,AUTHORITY,1);
         ContentResolver.setSyncAutomatically(account,AUTHORITY,true);
 
         Bundle bundle = new Bundle();

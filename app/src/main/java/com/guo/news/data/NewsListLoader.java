@@ -1,22 +1,10 @@
 package com.guo.news.data;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
-import android.widget.Toast;
 
-import com.guo.news.data.local.NewsContract.ContentEntity;
-import com.guo.news.data.model.ContentModel;
-import com.guo.news.data.model.ResultModel;
-import com.guo.news.data.remote.Service;
-import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.util.NetworkChecker;
-import com.guo.news.util.Utility;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Administrator on 2016/9/25.
@@ -81,55 +69,7 @@ public class NewsListLoader extends CursorLoader {
 
     private Cursor fetchFromRemote() {
         Cursor cursor = null;
-        Service service = ServiceHost.getService();
-            try {
-                ResultModel<PageModel> resultModel = service.getContentFromSection(mChannelId, mCurrentPage, null).execute().body();
-                if (resultModel.showapi_res_code == 0) {
-                    ArrayList<ContentModel> newsList = resultModel.showapi_res_body.contentlist;
 
-                    getContext().getContentResolver().bulkInsert(ContentEntity.CONTENT_URI, convertToCvs(newsList));
-
-                    if (mRefresh) {
-                        mRefresh = false;
-                    }
-
-                } else {
-                    Toast.makeText(getContext(), resultModel.showapi_res_error, Toast.LENGTH_SHORT).show();
-                }
-                    cursor =  loadFromLocal();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         return cursor;
     }
-
-
-    private ContentValues[] convertToCvs(ArrayList<ContentModel> newsList) {
-
-        ContentValues[] cvs = new ContentValues[newsList.size()];
-        for (ContentModel newsModel : newsList) {
-
-            ContentValues cv = new ContentValues();
-            cv.put(ContentEntity.COLUMN_HEADLINE,newsModel.title);
-            cv.put(ContentEntity.COLUMN_STANDFIRST,newsModel.source);
-            cv.put(ContentEntity.COLUMN_SECTION_ID,newsModel.channelId);
-            cv.put(ContentEntity.COLUMN_BYLINE,newsModel.channelName);
-            cv.put(ContentEntity.COLUMN_WORD_COUNT,newsModel.content);
-            cv.put(ContentEntity.COLUMN_BODY,newsModel.desc);
-            cv.put(ContentEntity.COLUMN_BODY,newsModel.havePic);
-            cv.put(ContentEntity.COLUMN_WEB_URL,newsModel.link);
-            if (newsModel.imageurls.size() >= 0) {
-                cv.put(ContentEntity.COLUMN_THUMBNAIL,newsModel.imageurls.get(0).url);
-            }
-            if (Utility.getTimeStamp(newsModel.pubDate) > 0) {
-
-                cv.put(ContentEntity.COLUMN_THUMBNAIL, Utility.getTimeStamp(newsModel.pubDate));
-            }
-
-            Arrays.fill(cvs,cv);
-        }
-        return cvs;
-    }
-
 }

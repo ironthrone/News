@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
-        NewsSyncAdapter.initlizeSync(getApplicationContext());
+        NewsSyncAdapter.initializeSync(getApplicationContext());
     }
 
 

@@ -23,9 +23,9 @@ import com.guo.news.data.model.ContentModel;
 import com.guo.news.data.remote.ResultTransformer;
 import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
+import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
 import com.guo.news.util.DateUtils;
 import com.guo.news.util.Utility;
-import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
 
 import java.util.List;
 
@@ -33,7 +33,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -110,6 +109,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Log.d(TAG, "section id is null ");
         }
         mLastDateInCP = DateUtils.format(System.currentTimeMillis(), DATE_TEMPLE);
+
     }
 
     @Override
@@ -138,19 +138,13 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ServiceHost.getService().getContentFromSection(mSectionId, mRefreshPage++, 10, null, null)
                 .map(new ResultTransformer<List<ContentModel>>())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<ContentModel>>() {
-                    @Override
-                    public void call(List<ContentModel> contentModels) {
-                        int insertedRow = Utility.insertContents(getContext(),contentModels);
-                        if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
-                            Toast.makeText(getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
-                        }
+                .subscribe(contentModels -> {
+                    int insertedRow = Utility.insertContents(getContext(),contentModels);
+                    if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
+                        Toast.makeText(getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                }, throwable -> {
+                    Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
