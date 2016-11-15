@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int SECTION_LOADER = 100;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -39,9 +41,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
+        mNewsFragmentPagerAdapter = new NewsFragmentPagerAdapter(getSupportFragmentManager(), null);
+        view_pager.setAdapter(mNewsFragmentPagerAdapter);
+        tab_layout.setupWithViewPager(view_pager);
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
+
         NewsSyncAdapter.initializeSync(getApplicationContext());
     }
 
@@ -59,11 +64,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        mNewsFragmentPagerAdapter = new NewsFragmentPagerAdapter(getSupportFragmentManager(), data);
-        view_pager.setAdapter(mNewsFragmentPagerAdapter);
-        tab_layout.setupWithViewPager(view_pager);
-
+        if (data == null) {
+            Log.d(TAG, "load finish, but cursor is null");
+        } else {
+            Log.d(TAG, "load finish cursor count is: " + data.getCount());
+        }
+        mNewsFragmentPagerAdapter.setCursor(data);
+        mNewsFragmentPagerAdapter.notifyDataSetChanged();
     }
 
 
@@ -82,21 +89,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             mSectionCursor = sectionCursor;
         }
 
+        public void setCursor(Cursor cursor) {
+            mSectionCursor = cursor;
+        }
         public void removeCursor() {
             mSectionCursor = null;
         }
 
         @Override
         public Fragment getItem(int position) {
-            if (mSectionCursor.moveToPosition(position)) {
+//            if (mSectionCursor.moveToPosition(position)) {
 
+            mSectionCursor.moveToPosition(position);
                 return NewsFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
-            }
-            return null;
+//            }
+//            return null;
         }
 
         @Override
         public int getCount() {
+            if(mSectionCursor == null) return 0;
             return mSectionCursor.getCount();
         }
 
@@ -106,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_WEB_TITLE));
             }
             return super.getPageTitle(position);
+        }
+
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
     }
 }

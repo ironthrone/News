@@ -14,7 +14,6 @@ public class ContentModel {
 
     public static class FieldModel {
         public String headline;
-        public String standfirst;
         public String trailText;
         public String byline;
         public String body;

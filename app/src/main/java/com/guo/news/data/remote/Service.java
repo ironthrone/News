@@ -3,7 +3,7 @@ package com.guo.news.data.remote;
 
 import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.model.ContentModel;
-import com.guo.news.data.model.ResultModel;
+import com.guo.news.data.model.ResponseModel;
 import com.guo.news.data.model.SectionModel;
 
 import java.util.List;
@@ -20,8 +20,8 @@ import rx.Observable;
 public interface Service {
 
 
-    @GET("section")
-    Observable<ResultModel<List<SectionModel>>> getSectionList();
+    @GET("sections")
+    Observable<ResponseModel<List<SectionModel>>> getSectionList();
 
     /**
      *
@@ -33,16 +33,16 @@ public interface Service {
      * @return
      */
     @GET("search?show-fields=all")
-    Observable<ResultModel<List<ContentModel>>> getContentFromSection(@Query("section") String section,
-                                                                      @Query("page") Integer page,
-                                                                      @Query("page-size") Integer pageSize,
-                                                                      @Query("from-date") String fromDate,
-                                                                      @Query("to-date") String toDate);
+    Observable<ResponseModel<List<ContentModel>>> getContentFromSection(@Query("section") String section,
+                                                                        @Query("page") Integer page,
+                                                                        @Query("page-size") Integer pageSize,
+                                                                        @Query("from-date") String fromDate,
+                                                                        @Query("to-date") String toDate);
 
 
     @GET("comment")
-    Observable<ResultModel<List<CommentModel>>> getCommentList();
+    Observable<ResponseModel<List<CommentModel>>> getCommentList();
 
     @POST("comment/add")
-    Observable<ResultModel<String>> addComment(@Body CommentModel co);
+    Observable<ResponseModel<String>> addComment(@Body CommentModel co);
 }

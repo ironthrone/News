@@ -33,6 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -59,39 +60,9 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
      */
     private String mLastDateInCP;
 
-    private LinearLoadMoreScrollListener mLoadMoreListener = new LinearLoadMoreScrollListener() {
-        @Override
-        public void loadMore(int page) {
-            ServiceHost.getService().getContentFromSection(mSectionId, page, 10, null, mLastDateInCP)
-                    .map(new ResultTransformer<List<ContentModel>>())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<ContentModel>>() {
-                        @Override
-                        public void onCompleted() {
 
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onNext(List<ContentModel> contentModels) {
-                            if (contentModels.size() == 0) {
-                                Toast.makeText(getContext(), "there is'nt  value", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (Utility.insertContents(getContext(),contentModels) < 0) {
-                                Log.d(TAG, "load more insert fail");
-                            }
-                        }
-                    });
-
-        }
-    };
     private int mRefreshPage = 1;
+    private LinearLoadMoreScrollListener mLoadMoreListener;
 
     public static NewsFragment getInstance(String sectionId) {
         NewsFragment fragment = new NewsFragment();
@@ -110,24 +81,63 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
         mLastDateInCP = DateUtils.format(System.currentTimeMillis(), DATE_TEMPLE);
 
+        mLoadMoreListener = new LinearLoadMoreScrollListener() {
+            @Override
+            public void loadMore(int page) {
+                ServiceHost.getService().getContentFromSection(mSectionId, page, 10, null, mLastDateInCP)
+                        .map(new ResultTransformer<List<ContentModel>>())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<List<ContentModel>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNext(List<ContentModel> contentModels) {
+                                if (contentModels.size() == 0) {
+                                    Toast.makeText(getContext(), "there is'nt  value", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (Utility.insertContents(getContext(),contentModels) < 0) {
+                                    Log.d(TAG, "load more insert fail");
+                                }
+                            }
+                        });
+
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_news, container, false);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ButterKnife.bind(this, getView());
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ButterKnife.bind(this, view);
         swipe_refresh.setOnRefreshListener(this);
+        swipe_refresh.setRefreshing(true);
 
         mAdapter = new NewsListAdapter(getContext(), null);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler_view.setAdapter(mAdapter);
         recycler_view.addOnScrollListener(mLoadMoreListener);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         getLoaderManager().initLoader(LOADER_CONTENT, null, this);
     }
@@ -138,13 +148,19 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ServiceHost.getService().getContentFromSection(mSectionId, mRefreshPage++, 10, null, null)
                 .map(new ResultTransformer<List<ContentModel>>())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(contentModels -> {
-                    int insertedRow = Utility.insertContents(getContext(),contentModels);
-                    if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
-                        Toast.makeText(getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
+                .subscribe(new Action1<List<ContentModel>>() {
+                    @Override
+                    public void call(List<ContentModel> contentModels) {
+                        int insertedRow = Utility.insertContents(NewsFragment.this.getContext(), contentModels);
+                        if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
+                            Toast.makeText(NewsFragment.this.getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }, throwable -> {
-                    Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(NewsFragment.this.getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
@@ -163,6 +179,12 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data == null) {
+            Log.d(TAG, "load finish,but cursor is null");
+
+        } else {
+            Log.d(TAG, "load finish cursor count is: " + data.getCount());
+        }
         if (mFirstLoaded) {
             if (data != null && data.moveToLast()) {
                 mLastDateInCP = data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE));
@@ -170,7 +192,9 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mFirstLoaded = false;
             }
         }
+//        mAdapter.setCursor(data);
         mAdapter.setCursor(data);
+        mAdapter.notifyDataSetChanged();
     }
 
 

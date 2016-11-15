@@ -157,8 +157,8 @@ public class NewsProvider extends ContentProvider {
             }
             default:
                 throw new UnsupportedOperationException("Unsupported uri:" + uri);
-
         }
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
         return cursor;
     }
 
@@ -321,6 +321,9 @@ public class NewsProvider extends ContentProvider {
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri:" + uri);
+        }
+        if (insertedRows > 0) {
+            getContext().getContentResolver().notifyChange(uri,null);
         }
         return insertedRows;
     }

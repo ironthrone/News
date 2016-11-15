@@ -41,9 +41,10 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
                     .into(holder.image);
             holder.title.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
             holder.date.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
-            holder.stand_first.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_STANDFIRST)));
+            holder.stand_first.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT)));
 
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

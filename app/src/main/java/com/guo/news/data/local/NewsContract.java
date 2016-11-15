@@ -43,7 +43,7 @@ public class NewsContract {
         public static final String COLUMN_WEB_PUBLICATION_DATE = "webPublicationDate";
         public static final String COLUMN_SECTION_ID = "sectionId";
         public static final String COLUMN_WEB_URL = "webUrl";
-        public static final String COLUMN_STANDFIRST = "standfirst";
+        public static final String COLUMN_TRAIL_TEXT = "trailText";
         public static final String COLUMN_BYLINE = "byline";
         public static final String COLUMN_BODY = "body";
         public static final String COLUMN_THUMBNAIL = "thumbnail";

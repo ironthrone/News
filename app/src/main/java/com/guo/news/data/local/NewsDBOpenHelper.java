@@ -29,10 +29,10 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 ContentEntity.COLUMN_SECTION_ID + " text not null," +
                 ContentEntity.COLUMN_WEB_PUBLICATION_DATE + " integer," +
                 ContentEntity.COLUMN_WEB_URL + " text not null," +
-                ContentEntity.COLUMN_BYLINE + " text not null," +
+                ContentEntity.COLUMN_BYLINE + " text," +
                 ContentEntity.COLUMN_BODY + " text not null," +
-                ContentEntity.COLUMN_THUMBNAIL + " text not null," +
-                ContentEntity.COLUMN_STANDFIRST + " text not null," +
+                ContentEntity.COLUMN_THUMBNAIL + " text," +
+                ContentEntity.COLUMN_TRAIL_TEXT + " text not null," +
                 ContentEntity.COLUMN_WORD_COUNT + " text," +
                 "unique(" + ContentEntity.COLUMN_ID + ") on conflict ignore" +
                 ");";

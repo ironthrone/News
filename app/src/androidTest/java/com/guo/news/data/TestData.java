@@ -15,12 +15,12 @@ public class TestData {
         cv.put(NewsContract.ContentEntity.COLUMN_BODY, "body");
         cv.put(NewsContract.ContentEntity.COLUMN_BYLINE, "byline");
         cv.put(NewsContract.ContentEntity.COLUMN_SECTION_ID, "sectionId");
-        cv.put(NewsContract.ContentEntity.COLUMN_STANDFIRST, "standFirst");
+        cv.put(NewsContract.ContentEntity.COLUMN_TRAIL_TEXT, "standFirst");
         cv.put(NewsContract.ContentEntity.COLUMN_WEB_PUBLICATION_DATE, "publicationDate");
         cv.put(NewsContract.ContentEntity.COLUMN_THUMBNAIL, "thumbnail");
         cv.put(NewsContract.ContentEntity.COLUMN_WEB_URL, "webUrl");
         cv.put(NewsContract.ContentEntity.COLUMN_WORD_COUNT, "wordCount");
-        cv.put(NewsContract.ContentEntity.COLUMN_STANDFIRST, "standFirst");
+        cv.put(NewsContract.ContentEntity.COLUMN_TRAIL_TEXT, "standFirst");
         return cv;
     }
 }

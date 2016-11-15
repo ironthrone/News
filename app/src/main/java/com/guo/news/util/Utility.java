@@ -61,7 +61,7 @@ public class Utility {
             contentValues.put(ContentEntity.COLUMN_WEB_PUBLICATION_DATE, contentModel.webPublicationDate);
             contentValues.put(ContentEntity.COLUMN_WEB_URL, contentModel.webUrl);
             contentValues.put(ContentEntity.COLUMN_HEADLINE, contentModel.fields.headline);
-            contentValues.put(ContentEntity.COLUMN_STANDFIRST, contentModel.fields.standfirst);
+            contentValues.put(ContentEntity.COLUMN_TRAIL_TEXT, contentModel.fields.trailText);
             contentValues.put(ContentEntity.COLUMN_BODY, contentModel.fields.body);
             contentValues.put(ContentEntity.COLUMN_BYLINE, contentModel.fields.byline);
             contentValues.put(ContentEntity.COLUMN_THUMBNAIL, contentModel.fields.thumbnail);
