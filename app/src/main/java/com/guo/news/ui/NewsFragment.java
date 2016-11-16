@@ -23,8 +23,10 @@ import com.guo.news.data.model.ContentModel;
 import com.guo.news.data.remote.ResultTransformer;
 import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
+import com.guo.news.ui.widget.DividerItemDecoration;
 import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
 import com.guo.news.util.DateUtils;
+import com.guo.news.util.MeasureConverter;
 import com.guo.news.util.Utility;
 
 import java.util.List;
@@ -47,6 +49,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private static final String TAG = NewsFragment.class.getSimpleName();
     private static final int LOADER_CONTENT = 100;
     private static final String DATE_TEMPLE = "yyyy-MM-dd";
+    private static final int DIVIDER_HEIGHT = 4;
     private String mSectionId;
 
     @Bind(R.id.swipe_refresh)
@@ -127,11 +130,11 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         ButterKnife.bind(this, view);
         swipe_refresh.setOnRefreshListener(this);
-        swipe_refresh.setRefreshing(true);
 
         mAdapter = new NewsListAdapter(getContext(), null);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler_view.setAdapter(mAdapter);
+        recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(),DIVIDER_HEIGHT)));
         recycler_view.addOnScrollListener(mLoadMoreListener);
     }
 
@@ -146,20 +149,25 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onRefresh() {
         ServiceHost.getService().getContentFromSection(mSectionId, mRefreshPage++, 10, null, null)
+                .subscribeOn(Schedulers.io())
                 .map(new ResultTransformer<List<ContentModel>>())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ContentModel>>() {
                     @Override
                     public void call(List<ContentModel> contentModels) {
-                        int insertedRow = Utility.insertContents(NewsFragment.this.getContext(), contentModels);
-                        if (contentModels.size() > 0 && insertedRow < contentModels.size()) {
+                        Utility.insertContents(NewsFragment.this.getContext(), contentModels);
+                        if (contentModels.size() < 0) {
+
                             Toast.makeText(NewsFragment.this.getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
                         }
+                        swipe_refresh.setRefreshing(false);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        Toast.makeText(NewsFragment.this.getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        throwable.printStackTrace();
+                        swipe_refresh.setRefreshing(false);
+
                     }
                 });
     }
@@ -192,7 +200,6 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mFirstLoaded = false;
             }
         }
-//        mAdapter.setCursor(data);
         mAdapter.setCursor(data);
         mAdapter.notifyDataSetChanged();
     }

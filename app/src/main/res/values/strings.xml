@@ -2,6 +2,6 @@
     <string name="app_name">News</string>
 
     <string name="account_type">guo.com</string>
-    <string name="account_name" >dummyAccount</string>
+    <string name="account_name">dummyAccount</string>
     <string name="news_provider_authority">com.guo.news</string>
 </resources>

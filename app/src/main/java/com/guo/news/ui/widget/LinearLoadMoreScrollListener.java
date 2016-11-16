@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
  * Created by Administrator on 2016/11/13.
  */
 public abstract class LinearLoadMoreScrollListener extends RecyclerView.OnScrollListener {
-    private static final int PREPARE_ITEM_COUNT = 3;
+    private static final int PREPARE_ITEM_COUNT = 5;
     private boolean mLoading;
     private int previousTotalItem;
     private int mCurrentPage;
@@ -15,13 +15,18 @@ public abstract class LinearLoadMoreScrollListener extends RecyclerView.OnScroll
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-        int totalItemCount = linearLayoutManager.getItemCount();
+        RecyclerView.LayoutManager layoutManager =  recyclerView.getLayoutManager();
+        int lastVisibleItemPosition = 0;
+        if (layoutManager instanceof LinearLayoutManager) {
+            lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+        } else {
+            return;
+        }
+        int totalItemCount = layoutManager.getItemCount();
 
         if (mLoading) {
             if (totalItemCount > previousTotalItem) {
-                mLoading = true;
+                mLoading = false;
                 previousTotalItem = totalItemCount;
             }
         }
