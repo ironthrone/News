@@ -59,8 +59,8 @@ public class NewsContract {
         public static Uri buildContentWithSectionUri(String sectionId){
             return CONTENT_URI.buildUpon().appendPath(sectionId).build();
         }
-        public static Uri buildContentWithIdUri(int id){
-            return CONTENT_URI.buildUpon().appendPath("item").appendPath(String.valueOf(id)).build();
+        public static Uri buildContentWithIdUri(String id){
+            return CONTENT_URI.buildUpon().appendPath("item").appendPath(id).build();
         }
 
     }

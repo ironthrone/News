@@ -35,4 +35,12 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
         if(mCursor == null) return 0;
         return mCursor.getCount();
     }
+
+    public Cursor getItem(int position) {
+        if (mCursor.moveToPosition(position)) {
+            return mCursor;
+        }
+
+        return null;
+    }
 }

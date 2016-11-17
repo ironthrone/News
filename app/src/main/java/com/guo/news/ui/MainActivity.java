@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            if (mSectionCursor.moveToPosition(position)) {
 
             mSectionCursor.moveToPosition(position);
-                return NewsFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
+                return NewsListFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
 //            }
 //            return null;
         }

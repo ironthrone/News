@@ -1,6 +1,7 @@
 package com.guo.news.ui;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
 import com.guo.news.ui.widget.DividerItemDecoration;
 import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
+import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
+import com.guo.news.ui.widget.RecyclerViewOnClickListener;
 import com.guo.news.util.DateUtils;
 import com.guo.news.util.MeasureConverter;
 import com.guo.news.util.Utility;
@@ -41,12 +44,13 @@ import rx.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        LoaderManager.LoaderCallbacks<Cursor>,
+        RecyclerViewOnClickListener.OnItemClickListener{
 
 
     private static final String KEY_SECTION_ID = "section_id";
-    private static final String TAG = NewsFragment.class.getSimpleName();
+    private static final String TAG = NewsListFragment.class.getSimpleName();
     private static final int LOADER_CONTENT = 100;
     private static final String DATE_TEMPLE = "yyyy-MM-dd";
     private static final int DIVIDER_HEIGHT = 4;
@@ -67,8 +71,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private int mRefreshPage = 1;
     private LinearLoadMoreScrollListener mLoadMoreListener;
 
-    public static NewsFragment getInstance(String sectionId) {
-        NewsFragment fragment = new NewsFragment();
+    public static NewsListFragment getInstance(String sectionId) {
+        NewsListFragment fragment = new NewsListFragment();
         Bundle args = new Bundle();
         args.putString(KEY_SECTION_ID, sectionId);
         fragment.setArguments(args);
@@ -121,7 +125,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_news, container, false);
+        return inflater.inflate(R.layout.fragment_news_list, container, false);
     }
 
     @Override
@@ -136,6 +140,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         recycler_view.setAdapter(mAdapter);
         recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(),DIVIDER_HEIGHT)));
         recycler_view.addOnScrollListener(mLoadMoreListener);
+        recycler_view.addOnItemTouchListener(new RecyclerViewOnClickListener(getContext(),this));
     }
 
     @Override
@@ -155,10 +160,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 .subscribe(new Action1<List<ContentModel>>() {
                     @Override
                     public void call(List<ContentModel> contentModels) {
-                        Utility.insertContents(NewsFragment.this.getContext(), contentModels);
+                        Utility.insertContents(NewsListFragment.this.getContext(), contentModels);
                         if (contentModels.size() < 0) {
 
-                            Toast.makeText(NewsFragment.this.getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NewsListFragment.this.getContext(), "There is no newer data!", Toast.LENGTH_SHORT).show();
                         }
                         swipe_refresh.setRefreshing(false);
                     }
@@ -208,5 +213,14 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onLoaderReset(Loader loader) {
         mAdapter.setCursor(null);
+    }
+
+    @Override
+    public void onItemClick(RecyclerView recyclerView,int position) {
+        Cursor cursor = ((RecyclerViewCursorAdapter) recyclerView.getAdapter()).getItem(position);
+        String contentId = cursor.getString(cursor.getColumnIndex(ContentEntity.COLUMN_ID));
+        Intent intent = new Intent(getActivity(), NewsActivity.class);
+        intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
+        getActivity().startActivity(intent);
     }
 }
