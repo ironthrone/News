@@ -30,6 +30,11 @@ public class RecyclerViewOnClickListener extends RecyclerView.SimpleOnItemTouchL
     }
 
     @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return true;
+    }
+
+    @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         super.onTouchEvent(rv, e);
         View itemView = rv.findChildViewUnder(e.getX(), e.getY());

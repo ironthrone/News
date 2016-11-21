@@ -1,7 +1,6 @@
 package com.guo.news.ui;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,8 +25,6 @@ import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.NewsListAdapter;
 import com.guo.news.ui.widget.DividerItemDecoration;
 import com.guo.news.ui.widget.LinearLoadMoreScrollListener;
-import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
-import com.guo.news.ui.widget.RecyclerViewOnClickListener;
 import com.guo.news.util.DateUtils;
 import com.guo.news.util.MeasureConverter;
 import com.guo.news.util.Utility;
@@ -37,6 +34,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -45,8 +43,7 @@ import rx.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor>,
-        RecyclerViewOnClickListener.OnItemClickListener{
+        LoaderManager.LoaderCallbacks<Cursor>{
 
 
     private static final String KEY_SECTION_ID = "section_id";
@@ -70,6 +67,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private int mRefreshPage = 1;
     private LinearLoadMoreScrollListener mLoadMoreListener;
+    private Subscription mNewsListSubscription;
 
     public static NewsListFragment getInstance(String sectionId) {
         NewsListFragment fragment = new NewsListFragment();
@@ -87,11 +85,10 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
             Log.d(TAG, "section id is null ");
         }
         mLastDateInCP = DateUtils.format(System.currentTimeMillis(), DATE_TEMPLE);
-
         mLoadMoreListener = new LinearLoadMoreScrollListener() {
             @Override
             public void loadMore(int page) {
-                ServiceHost.getService().getContentFromSection(mSectionId, page, 10, null, mLastDateInCP)
+                mNewsListSubscription = ServiceHost.getService().getContentFromSection(mSectionId, page, 10, null, mLastDateInCP)
                         .map(new ResultTransformer<List<ContentModel>>())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -120,6 +117,15 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         };
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mNewsListSubscription != null) {
+            mNewsListSubscription.unsubscribe();
+        }
     }
 
     @Override
@@ -140,7 +146,6 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         recycler_view.setAdapter(mAdapter);
         recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(),DIVIDER_HEIGHT)));
         recycler_view.addOnScrollListener(mLoadMoreListener);
-        recycler_view.addOnItemTouchListener(new RecyclerViewOnClickListener(getContext(),this));
     }
 
     @Override
@@ -215,12 +220,4 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mAdapter.setCursor(null);
     }
 
-    @Override
-    public void onItemClick(RecyclerView recyclerView,int position) {
-        Cursor cursor = ((RecyclerViewCursorAdapter) recyclerView.getAdapter()).getItem(position);
-        String contentId = cursor.getString(cursor.getColumnIndex(ContentEntity.COLUMN_ID));
-        Intent intent = new Intent(getActivity(), NewsActivity.class);
-        intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
-        getActivity().startActivity(intent);
-    }
 }

@@ -1,6 +1,7 @@
 package com.guo.news.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.ContentEntity;
+import com.guo.news.ui.NewsActivity;
 import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +23,6 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/11/11.
  */
 public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.ViewHolder> {
-
 
 
     public NewsListAdapter(Context context, Cursor cursor) {
@@ -36,12 +37,21 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
-            Picasso.with(mContext)
-                    .load(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL)))
-                    .into(holder.image);
-            holder.title.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
-            holder.date.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
-            holder.stand_first.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT)));
+        final String contentId = cursor.getString(cursor.getColumnIndex(ContentEntity.COLUMN_ID));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, NewsActivity.class);
+                intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
+                mContext.startActivity(intent);
+            }
+        });
+        Picasso.with(mContext)
+                .load(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL)))
+                .into(holder.image);
+        holder.title.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
+        holder.date.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
+        holder.stand_first.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT)));
 
     }
 
@@ -59,7 +69,7 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

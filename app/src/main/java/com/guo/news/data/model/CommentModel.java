@@ -5,7 +5,7 @@ package com.guo.news.data.model;
  */
 public class CommentModel {
     public int id;
-    public int news_id;
+    public String news_id;
     public long date;
     public String content;
 

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,7 +18,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp" />
         <TextView
-            android:text="@string/app_name"
+            android:id="@+id/section_id"
+            tools:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="@dimen/subheading"
             android:layout_centerInParent="true"
@@ -39,4 +41,12 @@
         android:dividerHeight="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/empty"
+        android:text="Please wait!"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

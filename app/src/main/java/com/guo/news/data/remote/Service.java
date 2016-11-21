@@ -41,7 +41,8 @@ public interface Service {
 
 
     @GET("comment")
-    Observable<ResponseModel<List<CommentModel>>> getCommentList();
+    Observable<ResponseModel<List<CommentModel>>> getCommentList(@Query("content-id") String contentId,
+                                                                 @Query("page") Integer page);
 
     @POST("comment/add")
     Observable<ResponseModel<String>> addComment(@Body CommentModel co);

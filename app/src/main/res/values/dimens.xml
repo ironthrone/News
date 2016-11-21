@@ -10,4 +10,6 @@
     <dimen name="title">21sp</dimen>
     <dimen name="headline">24sp</dimen>
 
+    <dimen name="appbar_elevation">8dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
 </resources>

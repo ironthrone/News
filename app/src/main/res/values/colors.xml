@@ -5,13 +5,14 @@
     <color name="colorAccent">#FF4081</color>
 
 
-    <color name="primary_text">#222222</color>
-    <color name="second_text">#999999</color>
-    <color name="hint_text">#999999</color>
     <!--<color name="primary_text_white">#ffffffff</color>-->
     <!--<color name="second_text_white">#b3ffffff</color>-->
     <!--<color name="hint_text_white">#80ffffff</color>-->
     <color name="primary_text_dark">#de000000</color>
     <color name="second_text_dark">#8a000000</color>
     <color name="hint_text_dark">#61000000</color>
+
+    <color name="divider_dark">#20000000</color>
+    <color name="divider_light">#20ffffff</color>
+
 </resources>

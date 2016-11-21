@@ -44,7 +44,7 @@
             android:layout_below="@id/image"
             android:layout_marginTop="4dp"
             android:textSize="@dimen/body"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/primary_text_dark"
             tools:text="他强由他强，清风拂山岗，他横由他横，明月照大江，他自狠来他自恶，我自一口真气足"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

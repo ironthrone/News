@@ -3,7 +3,6 @@
     android:accountType="@string/account_type"
     android:icon="@mipmap/ic_launcher"
     android:smallIcon="@mipmap/ic_launcher"
-    android:label="News"
-    >
+    android:label="News">
 
 </account-authenticator>

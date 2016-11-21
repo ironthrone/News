@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.guo.news.data.local.NewsContract;
+import com.guo.news.data.local.NewsContract.CommentEntity;
 import com.guo.news.data.local.NewsContract.ContentEntity;
+import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.model.ContentModel;
 import com.guo.news.data.model.SectionModel;
 
@@ -69,6 +71,20 @@ public class Utility {
             contentValuesArray[i] = contentValues;
         }
         return context.getContentResolver().bulkInsert(ContentEntity.CONTENT_URI, contentValuesArray);
+    }
+
+    public static int insertComments(Context context,List<CommentModel> commentModels) {
+        ContentValues[] contentValuesArray = new ContentValues[commentModels.size()];
+        for (int i = 0; i < commentModels.size() ; i++ ) {
+            CommentModel commentModel = commentModels.get(i);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(CommentEntity.COLUMN_ID, commentModel.id);
+            contentValues.put(CommentEntity.COLUMN_CONTENT, commentModel.content);
+            contentValues.put(CommentEntity.COLUMN_CONTENT_ID, commentModel.news_id);
+            contentValues.put(CommentEntity.COLUMN_ADD_TIME, commentModel.date);
+            contentValuesArray[i] = contentValues;
+        }
+        return context.getContentResolver().bulkInsert(CommentEntity.CONTENT_URI, contentValuesArray);
     }
 
 }

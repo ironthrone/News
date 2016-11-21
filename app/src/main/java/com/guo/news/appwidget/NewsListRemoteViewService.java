@@ -1,13 +1,18 @@
 package com.guo.news.appwidget;
 
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.guo.news.PreferenceConstant;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.ContentEntity;
+import com.guo.news.ui.NewsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -17,6 +22,8 @@ import java.io.IOException;
  */
 public class NewsListRemoteViewService extends RemoteViewsService {
 
+    private static final String TAG = NewsListRemoteViewService.class.getSimpleName();
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new NewsListRemoteViewFactory();
@@ -24,14 +31,19 @@ public class NewsListRemoteViewService extends RemoteViewsService {
 
     private class NewsListRemoteViewFactory implements RemoteViewsFactory {
 
-        //TODO　replace
-        private String mSectionId = "football";
         private Cursor mCursor;
 
         @Override
         public void onCreate() {
-            String[] projection = {ContentEntity.COLUMN_HEADLINE, ContentEntity.COLUMN_THUMBNAIL};
-            mCursor = getContentResolver().query(ContentEntity.buildContentWithSectionUri(mSectionId),
+        }
+
+        @Override
+        public void onDataSetChanged() {
+            Log.d(TAG, "onDataChange");
+            SharedPreferences mainPreference = getSharedPreferences(PreferenceConstant.MAIN_PREFERENCE, MODE_PRIVATE);
+            String sectionId = mainPreference.getString(PreferenceConstant.KEY_APP_WIDGET_SECTION, PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
+            String[] projection = {ContentEntity.COLUMN_HEADLINE, ContentEntity.COLUMN_THUMBNAIL,ContentEntity.COLUMN_ID};
+            mCursor = getContentResolver().query(ContentEntity.buildContentWithSectionUri(sectionId),
                     projection,
                     null,
                     null,
@@ -39,13 +51,11 @@ public class NewsListRemoteViewService extends RemoteViewsService {
         }
 
         @Override
-        public void onDataSetChanged() {
-
-        }
-
-        @Override
         public void onDestroy() {
-            mCursor = null;
+            if (mCursor != null) {
+                mCursor.close();
+                mCursor = null;
+            }
         }
 
         @Override
@@ -55,20 +65,23 @@ public class NewsListRemoteViewService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.item_app_widget);
-            //TODO add click intent
+            RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.item_app_widget);
             if (mCursor != null && mCursor.moveToPosition(position)) {
 
                 String headline = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE));
                 String thumbnailUrl = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL));
-                remoteViews.setTextViewText(R.id.headline,headline);
+                String contentId = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_ID));
+                remoteViews.setTextViewText(R.id.headline, headline);
                 try {
                     Bitmap bitmap = Picasso.with(getApplicationContext())
                             .load(thumbnailUrl)
-                            .resize(300,200)
+                            .resize(300, 200)
                             .get();
-                    remoteViews.setImageViewBitmap(R.id.thumbnail,bitmap);
-
+                    remoteViews.setImageViewBitmap(R.id.thumbnail, bitmap);
+                    Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
+                    intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
+                    PendingIntent toActivityPending = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    remoteViews.setOnClickPendingIntent(R.id.container, toActivityPending);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +96,7 @@ public class NewsListRemoteViewService extends RemoteViewsService {
 
         @Override
         public int getViewTypeCount() {
-            return 0;
+            return 1;
         }
 
         @Override
