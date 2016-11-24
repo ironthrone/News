@@ -34,7 +34,7 @@ public class NewsListWidgetProvider extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.news_app_widget);
 
-            Intent intent = new Intent(context, SelectSectionActivity.class);
+            Intent intent = new Intent(context, SelectWidgetSectionActivity.class);
             PendingIntent setPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.setting,setPendingIntent);
 

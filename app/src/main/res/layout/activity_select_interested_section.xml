@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.guo.news.ui.SelectInterestedSectionActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:elevation="@dimen/appbar_elevation"
+        app:navigationIcon="@drawable/ic_close_black_24dp" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="My sections"
+                android:textColor="@color/primary_text_dark"
+                android:textSize="@dimen/subheading" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/interested_sections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <!--<TextView-->
+    <!--android:text="My sections"-->
+    <!--android:textSize="@dimen/subheading"-->
+    <!--android:textColor="@color/primary_text_dark"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/all_sctions"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+</android.support.design.widget.CoordinatorLayout>

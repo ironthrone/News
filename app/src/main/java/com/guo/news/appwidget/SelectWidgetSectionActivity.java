@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
 
-public class SelectSectionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SelectWidgetSectionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int SECTION_LOADER = 100;
     private SectionAdapter mSectionAdapter;

@@ -75,8 +75,7 @@ public class NewsContract {
 
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_WEB_TITLE = "webTitle";
-
-
+        public static final String COLUMN_INSTERTED = "interest";
 
     }
 

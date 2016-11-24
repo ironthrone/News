@@ -47,6 +47,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.beloo.widget:ChipsLayoutManager:0.2.4@aar'
 
     androidTestCompile "com.android.support:support-annotations:$rootProject.ext.supportLibVersion"
     androidTestCompile 'com.android.support.test:runner:0.5'

@@ -23,7 +23,7 @@ public class UriMatcherTest {
         UriMatcher matcher = NewsProvider.getUriMatcher();
         Uri contentUri = ContentEntity.CONTENT_URI;
         Uri contentWithSectionUri = ContentEntity.buildContentWithSectionUri("football");
-        Uri contentWithIdUri = ContentEntity.buildContentWithIdUri(11);
+        Uri contentWithIdUri = ContentEntity.buildContentWithIdUri("11");
         Uri sectionUri = SectionEntity.CONTENT_URI;
         Uri commentUri = CommentEntity.CONTENT_URI;
         Uri commentWithContentUri = CommentEntity.buildWithContentIDUrl("google");

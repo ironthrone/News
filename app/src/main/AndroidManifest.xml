@@ -42,8 +42,7 @@
         <!-- android:process=":sync" -->
         <service
             android:name=".data.remote.NewsSyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -74,14 +73,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
-        <activity android:name=".ui.CommentActivity">
+        <activity android:name=".ui.CommentActivity" />
+        <activity android:name=".appwidget.SelectWidgetSectionActivity" />
+        <activity android:name=".ui.SelectInterestedSectionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".appwidget.SelectSectionActivity"></activity>
     </application>
 
 </manifest>

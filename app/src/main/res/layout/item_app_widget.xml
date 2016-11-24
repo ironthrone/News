@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:padding="6dp"
+    android:layout_height="65dp"
+    android:padding="4dp"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="50dp"
+        android:layout_width="65dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         tools:src="@mipmap/ic_launcher" />

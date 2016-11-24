@@ -49,6 +49,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 SectionEntity._ID + " text primary key," +
                 SectionEntity.COLUMN_ID + " text unique not null," +
                 SectionEntity.COLUMN_WEB_TITLE + " text not null," +
+                SectionEntity.COLUMN_INSTERTED + " integer default 0," +
                 "unique("+ SectionEntity.COLUMN_ID +")on conflict ignore" +
                 ");";
         db.execSQL(CREATE_COMMENT_TABLE);
