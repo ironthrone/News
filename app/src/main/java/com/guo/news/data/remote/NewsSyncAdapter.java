@@ -18,6 +18,7 @@ import com.guo.news.data.model.SectionModel;
 import com.guo.news.util.Utility;
 
 import java.util.List;
+import java.util.Random;
 
 import rx.functions.Action1;
 
@@ -47,44 +48,56 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                               SyncResult syncResult) {
 
         Log.d(TAG, "perform sync");
+
         ServiceHost.getService().getSectionList()
                 .map(new ResultTransformer<List<SectionModel>>())
                 .subscribe(new Action1<List<SectionModel>>() {
                     @Override
                     public void call(List<SectionModel> sectionModels) {
+                        String where = NewsContract.SectionEntity.COLUMN_INSTERTED + " = ?";
+                        String[] whereArgs = new String[]{"1"};
+                        Cursor cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
+                                null, where, whereArgs, null);
+                        if (cursor != null && cursor.getCount() == 0) {
+                            int sectionNum = sectionModels.size();
+                            Random random = new Random();
+                            for(int i = 0;i < 6;i++) {
+                                sectionModels.get(random.nextInt(sectionNum)).insterested = true;
+                            }
+                        }
+
                         int insertedRows = Utility.insertSections(getContext(), sectionModels);
                         Log.d(TAG, "insert section for " + insertedRows + " rows");
-                        Cursor cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
-                                null, null, null, NewsContract.SectionEntity._ID + " desc");
-                        // sync first three section
-                            if (cursor != null)
-                                try{
 
-                                    for (int i = 0; i < cursor.getCount(); i++) {
-                                        if (cursor.moveToPosition(i)) {
+                        // sync the interested section
+                        cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
+                                null, where, whereArgs, null);
+                        if (cursor != null && cursor.moveToFirst()){
+                            try {
 
-                                            String sectionId = cursor.getString(cursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID));
-                                            Log.d(TAG, "pull content from section: " + sectionId);
-                                            ServiceHost.getService().getContentFromSection(sectionId, null, 50, null, null)
-                                                    .map(new ResultTransformer<List<ContentModel>>())
-                                                    .subscribe(new Action1<List<ContentModel>>() {
-                                                        @Override
-                                                        public void call(List<ContentModel> contentModels) {
-                                                            Log.d(TAG, "pull content successful");
-                                                            Utility.insertContents(getContext(), contentModels);
-                                                        }
-                                                    }, new Action1<Throwable>() {
-                                                        @Override
-                                                        public void call(Throwable throwable) {
-                                                            throwable.printStackTrace();
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                }finally {
-                                    cursor.close();
-                                }
+                                do {
+                                    String sectionId = cursor.getString(cursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID));
+                                    Log.d(TAG, "pull content from section: " + sectionId);
+                                    ServiceHost.getService().getContentFromSection(sectionId, null, 50, null, null)
+                                            .map(new ResultTransformer<List<ContentModel>>())
+                                            .subscribe(new Action1<List<ContentModel>>() {
+                                                @Override
+                                                public void call(List<ContentModel> contentModels) {
+                                                    Log.d(TAG, "pull content successful");
+                                                    Utility.insertContents(getContext(), contentModels);
+                                                }
+                                            }, new Action1<Throwable>() {
+                                                @Override
+                                                public void call(Throwable throwable) {
+                                                    throwable.printStackTrace();
+                                                }
+                                            });
+                                } while (cursor.moveToNext());
+                            } finally {
+                                cursor.close();
+                            }
                         }
+                    }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {

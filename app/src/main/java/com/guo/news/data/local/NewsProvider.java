@@ -243,7 +243,7 @@ public class NewsProvider extends ContentProvider {
         int updatedRow = 0;
         switch (mUriMatcher.match(uri)) {
             case SECTION:
-                updatedRow = mDatabaseHelper.getWritableDatabase().update(ContentEntity.TABLE_NAME,
+                updatedRow = mDatabaseHelper.getWritableDatabase().update(SectionEntity.TABLE_NAME,
                         values,
                         selection,
                         selectionArgs);

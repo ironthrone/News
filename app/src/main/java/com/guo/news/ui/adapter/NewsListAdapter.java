@@ -1,7 +1,6 @@
 package com.guo.news.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.ContentEntity;
-import com.guo.news.ui.NewsActivity;
 import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -25,8 +23,11 @@ import butterknife.ButterKnife;
 public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.ViewHolder> {
 
 
-    public NewsListAdapter(Context context, Cursor cursor) {
+    private final OnItemClickListener mOnItemClickListener;
+
+    public NewsListAdapter(Context context, Cursor cursor, OnItemClickListener onItemClickListener) {
         super(context, cursor);
+        mOnItemClickListener = onItemClickListener;
     }
 
 
@@ -37,13 +38,15 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
+        final ViewHolder finalHolder =holder;
         final String contentId = cursor.getString(cursor.getColumnIndex(ContentEntity.COLUMN_ID));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, NewsActivity.class);
-                intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
-                mContext.startActivity(intent);
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(finalHolder,contentId);
+                }
+
             }
         });
         Picasso.with(mContext)
@@ -56,16 +59,20 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
     }
 
 
+    public interface OnItemClickListener {
+        void onItemClick(ViewHolder holder,String contentId);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.image)
-        ImageView image;
+        public ImageView image;
         @Bind(R.id.title)
-        TextView title;
+        public TextView title;
         @Bind(R.id.date)
-        TextView date;
+        public TextView date;
         @Bind(R.id.stand_first)
-        TextView stand_first;
+        public TextView stand_first;
 
         public ViewHolder(View itemView) {
             super(itemView);

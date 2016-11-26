@@ -40,6 +40,7 @@ public class Utility {
             ContentValues contentValues = new ContentValues();
             contentValues.put(NewsContract.SectionEntity.COLUMN_ID,sectionModel.id);
             contentValues.put(NewsContract.SectionEntity.COLUMN_WEB_TITLE,sectionModel.webTitle);
+            contentValues.put(NewsContract.SectionEntity.COLUMN_INSTERTED,sectionModel.insterested);
             contentValuesArray[i] = contentValues;
         }
         return context.getContentResolver().bulkInsert(NewsContract.SectionEntity.CONTENT_URI, contentValuesArray);

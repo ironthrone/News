@@ -7,21 +7,23 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:layout_height="@dimen/app_widget_title_height"
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
         <ImageView
             android:layout_alignParentLeft="true"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:src="@mipmap/ic_launcher"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="@dimen/app_widget_title_height"
+            android:layout_height="@dimen/app_widget_title_height" />
         <TextView
             android:id="@+id/section_id"
             tools:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="@dimen/subheading"
+            android:textAllCaps="true"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -29,21 +31,21 @@
             android:id="@+id/setting"
             android:clickable="true"
             android:layout_alignParentRight="true"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_settings"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="@dimen/app_widget_title_height"
+            android:layout_height="@dimen/app_widget_title_height" />
     </RelativeLayout>
     <ListView
         android:id="@+id/news_list"
         android:layout_marginTop="4dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="2dp"
+        android:dividerHeight="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/empty"
-        android:text="Please wait!"
+        android:text="Hold on! I'm loading"
         android:layout_gravity="center"
         android:textColor="@android:color/white"
         android:textSize="@dimen/subheading"

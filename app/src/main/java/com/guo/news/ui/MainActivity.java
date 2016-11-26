@@ -1,5 +1,6 @@
 package com.guo.news.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
@@ -20,6 +22,7 @@ import com.guo.news.data.remote.NewsSyncAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TabLayout tab_layout;
     @Bind(R.id.view_pager)
     ViewPager view_pager;
+//    @Bind(R.id.add_section)
+//    ImageView add_section;
     private NewsFragmentPagerAdapter mNewsFragmentPagerAdapter;
 
     @Override
@@ -51,14 +56,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
+    @OnClick({R.id.add_section})
+    public void click(View view) {
+        switch (view.getId()) {
+            case R.id.add_section:
+                Intent intent = new Intent(this, SelectInterestedSectionActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 
     @Override
     public CursorLoader onCreateLoader(int id, Bundle args) {
+        String where = NewsContract.SectionEntity.COLUMN_INSTERTED + " = ?";
+        String[] whereArgs = new String[]{"1"};
         return new CursorLoader(this,
                 NewsContract.SectionEntity.CONTENT_URI,
                 null,
-                null,
-                null,
+                where,
+                whereArgs,
                 null);
     }
 

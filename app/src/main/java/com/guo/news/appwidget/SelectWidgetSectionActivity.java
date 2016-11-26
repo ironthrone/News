@@ -16,7 +16,7 @@ import com.guo.news.data.local.NewsContract;
 public class SelectWidgetSectionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int SECTION_LOADER = 100;
-    private SectionAdapter mSectionAdapter;
+    private ListSectionAdapter mSectionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +24,11 @@ public class SelectWidgetSectionActivity extends AppCompatActivity implements Lo
         setContentView(R.layout.activity_select_section_id);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         RecyclerView section_list  = (RecyclerView) findViewById(R.id.section_list);
-        mSectionAdapter = new SectionAdapter(this,null);
+
+        mSectionAdapter = new ListSectionAdapter(this,null);
         section_list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         section_list.setAdapter(mSectionAdapter);
+
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
     }
 

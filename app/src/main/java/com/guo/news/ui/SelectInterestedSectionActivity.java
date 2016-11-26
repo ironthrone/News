@@ -11,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
+import com.beloo.widget.chipslayoutmanager.SpacingItemDecoration;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
-import com.guo.news.ui.adapter.SectionAdapterV2;
+import com.guo.news.ui.adapter.ChipsSectionAdapter;
+import com.guo.news.util.MeasureConverter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,7 +27,7 @@ public class SelectInterestedSectionActivity extends AppCompatActivity implement
     RecyclerView interested_sections;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    private SectionAdapterV2 mSectionAdapter;
+    private ChipsSectionAdapter mSectionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +37,18 @@ public class SelectInterestedSectionActivity extends AppCompatActivity implement
 
 
         setSupportActionBar(toolbar);
-        toolbar.setTitle("");
 
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(this)
-                .setScrollingEnabled(true)
+//                .setScrollingEnabled(true)
                 .setMaxViewsInRow(6)
                 .build();
 
 
-//        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);+
         interested_sections.setLayoutManager(chipsLayoutManager);
 
-        mSectionAdapter = new SectionAdapterV2(this, null);
+        mSectionAdapter = new ChipsSectionAdapter(this, null);
         interested_sections.setAdapter(mSectionAdapter);
+        interested_sections.addItemDecoration(new SpacingItemDecoration(MeasureConverter.dip2px(this,4),MeasureConverter.dip2px(this,4)));
 
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
     }

@@ -4,4 +4,5 @@
     <string name="account_type">guo.com</string>
     <string name="account_name">dummyAccount</string>
     <string name="news_provider_authority">com.guo.news</string>
+    <string name="transition_content_image">contentImage</string>
 </resources>

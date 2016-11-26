@@ -40,10 +40,10 @@ public interface Service {
                                                                         @Query("to-date") String toDate);
 
 
-    @GET("comment")
+    @GET("https://get20000.herokuapp.com/list")
     Observable<ResponseModel<List<CommentModel>>> getCommentList(@Query("content-id") String contentId,
                                                                  @Query("page") Integer page);
 
-    @POST("comment/add")
+    @POST("https://get20000.herokuapp.com/add")
     Observable<ResponseModel<String>> addComment(@Body CommentModel co);
 }

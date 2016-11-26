@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -70,7 +71,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mContentId = getIntent().getStringExtra(KEY_CONTENT_ID);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         comment_list.setLayoutManager(new LinearLayoutManager(this));
         mCommentAdapter = new CommentAdapter(this, null);
@@ -82,6 +83,15 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             getSupportLoaderManager().initLoader(COMMENTS_LOADER, null, this);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -117,6 +127,15 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                     Picasso.with(this)
                             .load(data.getString(data.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL)))
                             .into(news_image);
+//                    Palette palette = Palette.from(((BitmapDrawable) news_image.getDrawable()).getBitmap())
+//                            .generate();
+//                    Palette.Swatch vibrant = palette.getVibrantSwatch();
+//                    if (vibrant != null) {
+//                        toolbar.setBackgroundColor(vibrant.getRgb());
+//                        toolbar.setTitleTextColor(vibrant.getTitleTextColor());
+//                    }
+
+
                 }
                 break;
             case COMMENTS_LOADER:

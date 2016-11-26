@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.guo.news.R;
@@ -21,9 +20,9 @@ import butterknife.ButterKnife;
 /**
  * Created by Administrator on 2016/11/23.
  */
-public class SectionAdapterV2 extends RecyclerViewCursorAdapter<SectionAdapterV2.ViewHolder> {
+public class ChipsSectionAdapter extends RecyclerViewCursorAdapter<ChipsSectionAdapter.ViewHolder> {
 
-    public SectionAdapterV2(Context context, Cursor cursor) {
+    public ChipsSectionAdapter(Context context, Cursor cursor) {
         super(context, cursor);
     }
 
@@ -38,11 +37,11 @@ public class SectionAdapterV2 extends RecyclerViewCursorAdapter<SectionAdapterV2
         holder.interested.setChecked(cursor.getInt(cursor.getColumnIndex(SectionEntity.COLUMN_INSTERTED)) == 1);
         final String sectionId = cursor.getString(cursor.getColumnIndex(SectionEntity.COLUMN_ID));
 
-        holder.interested.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.interested.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(SectionEntity.COLUMN_INSTERTED,isChecked ? 1 : 0);
+                contentValues.put(SectionEntity.COLUMN_INSTERTED,((CheckBox) v).isChecked() ? 1 : 0);
                 String where = SectionEntity.COLUMN_ID + "= ? ";
                 String[] whereArgs = {sectionId};
                 mContext.getContentResolver().update(SectionEntity.CONTENT_URI,
@@ -51,6 +50,19 @@ public class SectionAdapterV2 extends RecyclerViewCursorAdapter<SectionAdapterV2
                         whereArgs);
             }
         });
+//        holder.interested.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                ContentValues contentValues = new ContentValues();
+//                contentValues.put(SectionEntity.COLUMN_INSTERTED,isChecked ? 1 : 0);
+//                String where = SectionEntity.COLUMN_ID + "= ? ";
+//                String[] whereArgs = {sectionId};
+//                mContext.getContentResolver().update(SectionEntity.CONTENT_URI,
+//                        contentValues,
+//                        where,
+//                        whereArgs);
+//            }
+//        });
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

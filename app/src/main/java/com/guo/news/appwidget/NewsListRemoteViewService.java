@@ -1,16 +1,14 @@
 package com.guo.news.appwidget;
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.guo.news.PreferenceConstant;
 import com.guo.news.R;
+import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.local.NewsContract.ContentEntity;
 import com.guo.news.ui.NewsActivity;
 import com.squareup.picasso.Picasso;
@@ -23,9 +21,12 @@ import java.io.IOException;
 public class NewsListRemoteViewService extends RemoteViewsService {
 
     private static final String TAG = NewsListRemoteViewService.class.getSimpleName();
+    public static final String KEY_SECTION_ID = "sectionId";
+    private String mSectionId;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        mSectionId = intent.getStringExtra(KEY_SECTION_ID);
         return new NewsListRemoteViewFactory();
     }
 
@@ -40,13 +41,16 @@ public class NewsListRemoteViewService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             Log.d(TAG, "onDataChange");
-            SharedPreferences mainPreference = getSharedPreferences(PreferenceConstant.MAIN_PREFERENCE, MODE_PRIVATE);
-            String sectionId = mainPreference.getString(PreferenceConstant.KEY_APP_WIDGET_SECTION, PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
-            String[] projection = {ContentEntity.COLUMN_HEADLINE, ContentEntity.COLUMN_THUMBNAIL,ContentEntity.COLUMN_ID};
-            mCursor = getContentResolver().query(ContentEntity.buildContentWithSectionUri(sectionId),
+            String[] projection = {ContentEntity.COLUMN_HEADLINE,
+                    ContentEntity.COLUMN_THUMBNAIL,
+                    ContentEntity.COLUMN_BYLINE,
+                    ContentEntity.COLUMN_ID};
+            String where = NewsContract.SectionEntity.COLUMN_INSTERTED + " = ?";
+            String[] whereArgs = new String[]{"1"};
+            mCursor = getContentResolver().query(ContentEntity.buildContentWithSectionUri(mSectionId),
                     projection,
-                    null,
-                    null,
+                    where,
+                    whereArgs,
                     null);
         }
 
@@ -71,17 +75,19 @@ public class NewsListRemoteViewService extends RemoteViewsService {
                 String headline = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE));
                 String thumbnailUrl = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL));
                 String contentId = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_ID));
+                String byline = mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_BYLINE));
                 remoteViews.setTextViewText(R.id.headline, headline);
+                remoteViews.setTextViewText(R.id.byline, byline);
                 try {
                     Bitmap bitmap = Picasso.with(getApplicationContext())
                             .load(thumbnailUrl)
                             .resize(300, 200)
                             .get();
                     remoteViews.setImageViewBitmap(R.id.thumbnail, bitmap);
-                    Intent intent = new Intent(getApplicationContext(), NewsActivity.class);
-                    intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
-                    PendingIntent toActivityPending = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    remoteViews.setOnClickPendingIntent(R.id.container, toActivityPending);
+
+                    Intent fillInIntent = new Intent(getApplicationContext(), NewsActivity.class);
+                    fillInIntent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
+                    remoteViews.setOnClickFillInIntent(R.id.container,fillInIntent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

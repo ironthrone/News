@@ -1,9 +1,11 @@
 package com.guo.news.ui;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -43,7 +45,7 @@ import rx.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor>{
+        LoaderManager.LoaderCallbacks<Cursor>,NewsListAdapter.OnItemClickListener {
 
 
     private static final String KEY_SECTION_ID = "section_id";
@@ -141,7 +143,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         ButterKnife.bind(this, view);
         swipe_refresh.setOnRefreshListener(this);
 
-        mAdapter = new NewsListAdapter(getContext(), null);
+        mAdapter = new NewsListAdapter(getContext(), null,this);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler_view.setAdapter(mAdapter);
         recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(),DIVIDER_HEIGHT)));
@@ -218,6 +220,15 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onLoaderReset(Loader loader) {
         mAdapter.setCursor(null);
+    }
+
+    @Override
+    public void onItemClick(NewsListAdapter.ViewHolder holder, String contentId) {
+        Intent intent = new Intent(getContext(), NewsActivity.class);
+        intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), holder.image, getString(R.string.transition_content_image));
+        startActivity(intent,options.toBundle());
+
     }
 
 }

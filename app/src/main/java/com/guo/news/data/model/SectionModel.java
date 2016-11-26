@@ -6,4 +6,5 @@ package com.guo.news.data.model;
 public class SectionModel {
     public String id;
     public String webTitle;
+    public boolean insterested;
 }
