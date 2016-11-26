@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class ListSectionAdapter extends RecyclerViewCursorAdapter {
 
     public ListSectionAdapter(Context context, Cursor cursor) {
         super(context, cursor);
-        sharedPreferences = mContext.getSharedPreferences(PreferenceConstant.MAIN_PREFERENCE, Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     @Override

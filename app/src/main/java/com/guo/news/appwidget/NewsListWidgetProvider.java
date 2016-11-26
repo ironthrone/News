@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -30,7 +31,7 @@ public class NewsListWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PreferenceConstant.MAIN_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         for(int i = 0; i < appWidgetIds.length; i++) {
             int appWidgetId = appWidgetIds[i];

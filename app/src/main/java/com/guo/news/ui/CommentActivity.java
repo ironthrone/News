@@ -61,7 +61,7 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            exitWarning();
+            checkThenFinish();
 
             return true;
         }
@@ -75,11 +75,11 @@ public class CommentActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        exitWarning();
+        checkThenFinish();
     }
 
 
-    private void exitWarning() {
+    private void checkThenFinish() {
         if (!TextUtils.isEmpty(comment.getText().toString().trim())) {
 
             new AlertDialog.Builder(CommentActivity.this)
@@ -95,6 +95,8 @@ public class CommentActivity extends AppCompatActivity {
                     finish();
                 }
             }).show();
+        } else {
+            finish();
         }
     }
 
