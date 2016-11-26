@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.guo.news.R;
@@ -29,7 +30,6 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = NewsSyncAdapter.class.getSimpleName();
     // 4 hours
-    private static final long SYNC_INTERVAL = 4 * 60 * 60;
 
     public NewsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -118,11 +118,23 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
+    public static void changeSyncInterval(Context context,int interval) {
+
+        String AUTHORITY = context.getString(R.string.news_provider_authority);
+        Account account = new Account(context.getString(R.string.account_name), context.getString(R.string.account_type));
+
+        //change minite to second
+        interval = interval * 60;
+        ContentResolver.addPeriodicSync(account,
+                AUTHORITY, new Bundle(), interval);
+    }
+
     private static void onCreateAccount(Account account, Context context) {
         String AUTHORITY = context.getString(R.string.news_provider_authority);
+        String sync = PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.pref_sync_frequency_key),
+                context.getString(R.string.pref_sync_frequency_default));
+        int syncInterval = Integer.parseInt(sync) * 60;
 
-        ContentResolver.addPeriodicSync(account,
-                AUTHORITY, new Bundle(), SYNC_INTERVAL);
 
         //set account is syncable
         ContentResolver.setIsSyncable(account, AUTHORITY, 1);

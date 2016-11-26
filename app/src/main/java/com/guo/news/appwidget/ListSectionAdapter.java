@@ -2,6 +2,7 @@ package com.guo.news.appwidget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +42,8 @@ public class ListSectionAdapter extends RecyclerViewCursorAdapter {
                 sharedPreferences.edit().putString(PreferenceConstant.KEY_APP_WIDGET_SECTION, sectionId).apply();
                 Intent intent = new Intent(mContext,NewsListWidgetProvider.class);
                 intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                int[] ids = {R.xml.news_appwidget_provider_info};
+//                int[] ids = {R.xml.news_appwidget_provider_info};
+                int[] ids = AppWidgetManager.getInstance(mContext).getAppWidgetIds(new ComponentName(mContext, NewsListWidgetProvider.class));
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 mContext.sendBroadcast(intent);
                 ((Activity) mContext).finish();
