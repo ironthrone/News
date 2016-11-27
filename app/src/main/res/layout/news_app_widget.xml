@@ -46,9 +46,9 @@
     <TextView
         android:id="@+id/empty"
         android:text="Hold on! I'm loading"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:textSize="@dimen/subheading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

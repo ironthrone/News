@@ -6,12 +6,14 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.guo.news.PreferenceConstant;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.model.ContentModel;
@@ -61,7 +63,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                         if (cursor != null && cursor.getCount() == 0) {
                             int sectionNum = sectionModels.size();
                             Random random = new Random();
-                            for(int i = 0;i < 6;i++) {
+                            for (int i = 0; i < 6; i++) {
                                 sectionModels.get(random.nextInt(sectionNum)).insterested = true;
                             }
                         }
@@ -72,11 +74,24 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                         // sync the interested section
                         cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
                                 null, where, whereArgs, null);
-                        if (cursor != null && cursor.moveToFirst()){
+
+                        if (cursor != null && cursor.moveToFirst()) {
                             try {
+
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                                String widgetSectionId = sharedPreferences.getString(PreferenceConstant.KEY_APP_WIDGET_SECTION, PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
+                                boolean setWidgetSection = widgetSectionId.equals(PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
+
 
                                 do {
                                     String sectionId = cursor.getString(cursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID));
+
+                                    if (setWidgetSection) {
+
+                                        sharedPreferences.edit().putString(PreferenceConstant.KEY_APP_WIDGET_SECTION, sectionId).apply();
+                                        setWidgetSection = false;
+                                    }
+
                                     Log.d(TAG, "pull content from section: " + sectionId);
                                     ServiceHost.getService().getContentFromSection(sectionId, null, 50, null, null)
                                             .map(new ResultTransformer<List<ContentModel>>())
@@ -118,7 +133,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    public static void changeSyncInterval(Context context,int interval) {
+    public static void changeSyncInterval(Context context, int interval) {
 
         String AUTHORITY = context.getString(R.string.news_provider_authority);
         Account account = new Account(context.getString(R.string.account_name), context.getString(R.string.account_type));
@@ -133,8 +148,10 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
         String AUTHORITY = context.getString(R.string.news_provider_authority);
         String sync = PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.pref_sync_frequency_key),
                 context.getString(R.string.pref_sync_frequency_default));
-        int syncInterval = Integer.parseInt(sync) * 60;
 
+        int syncInterval = Integer.parseInt(sync) * 60;
+        ContentResolver.addPeriodicSync(account,
+                AUTHORITY, new Bundle(), syncInterval);
 
         //set account is syncable
         ContentResolver.setIsSyncable(account, AUTHORITY, 1);

@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TabLayout tab_layout;
     @Bind(R.id.view_pager)
     ViewPager view_pager;
-//    @Bind(R.id.add_section)
-//    ImageView add_section;
     private NewsFragmentPagerAdapter mNewsFragmentPagerAdapter;
 
     @Override
@@ -70,19 +68,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.setting:
                 startActivity(new Intent(this,SettingsActivity.class));
                 return true;
+            case R.id.select:
+                Intent intent = new Intent(this, SelectInterestedSectionActivity.class);
+                startActivity(intent);
+
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.add_section})
-    public void click(View view) {
-        switch (view.getId()) {
-            case R.id.add_section:
-                Intent intent = new Intent(this, SelectInterestedSectionActivity.class);
-                startActivity(intent);
-                break;
-        }
-    }
 
     @Override
     public CursorLoader onCreateLoader(int id, Bundle args) {

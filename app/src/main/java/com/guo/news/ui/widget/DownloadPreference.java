@@ -6,10 +6,14 @@ import android.content.DialogInterface;
 import android.preference.Preference;
 import android.util.AttributeSet;
 
+import com.guo.news.data.AppUpdater;
+
 /**
  * Created by Administrator on 2016/11/26.
  */
 public class DownloadPreference extends Preference {
+
+
     public DownloadPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -22,7 +26,7 @@ public class DownloadPreference extends Preference {
                 .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        AppUpdater.getInstance(getContext()).update();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
