@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="2dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
-    <ImageView
-        android:id="@+id/image"
-        android:transitionName="@string/transition_content_image"
-        android:scaleType="centerCrop"
-        android:layout_width="150dp"
-        android:layout_height="200dp" />
-    <TextView
-        android:id="@+id/title"
-        android:layout_toRightOf="@id/image"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:textSize="@dimen/title"
-        android:textColor="@color/primary_text_dark"
-        tools:text="号外号外"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:transitionName="@string/transition_content_image" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@id/image"
+            android:textAllCaps="true"
+            android:textColor="@color/primary_text_dark"
+            android:textSize="@dimen/title"
+            tools:text="号外号外" />
+
         <TextView
             android:id="@+id/date"
-            android:layout_below="@id/title"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="6dp"
-            android:textSize="@dimen/caption"
-            android:textColor="@color/second_text_dark"
-            tools:text="2016-11-11"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/title"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/second_text_dark"
+            android:textSize="@dimen/caption"
+            tools:text="2016-11-11" />
+
         <TextView
             android:id="@+id/stand_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/image"
             android:layout_marginTop="4dp"
-            android:textSize="@dimen/body"
             android:textColor="@color/primary_text_dark"
-            tools:text="他强由他强，清风拂山岗，他横由他横，明月照大江，他自狠来他自恶，我自一口真气足"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="@dimen/body"
+            tools:text="他强由他强，清风拂山岗，他横由他横，明月照大江，他自狠来他自恶，我自一口真气足" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -1,7 +1,9 @@
 package com.guo.news.ui;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.ConditionVariable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.guo.news.R;
+import com.guo.news.data.local.NewsContract;
+import com.guo.news.data.local.NewsContract.CommentEntity;
 import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.remote.ResultTransformer;
 import com.guo.news.data.remote.ServiceHost;
@@ -49,11 +53,6 @@ public class CommentActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-//        if (comment.requestFocus()) {
-//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.showSoftInput(comment, InputMethodManager.SHOW_IMPLICIT);
-//        }
 
     }
 
@@ -109,18 +108,24 @@ public class CommentActivity extends AppCompatActivity {
                     Toast.makeText(CommentActivity.this, "comment is null", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                CommentModel commentModel = new CommentModel();
+                 CommentModel commentModel = new CommentModel();
                 commentModel.content = commentStr;
-                commentModel.news_id = mContentId;
+                commentModel.contentId = mContentId;
 
                 ServiceHost.getService().addComment(commentModel)
                         .subscribeOn(Schedulers.io())
-                        .map(new ResultTransformer<String>())
+                        .map(new ResultTransformer<CommentModel>())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<String>() {
+                        .subscribe(new Action1<CommentModel>() {
                             @Override
-                            public void call(String s) {
-                                Toast.makeText(CommentActivity.this, s, Toast.LENGTH_SHORT).show();
+                            public void call(CommentModel c) {
+                                Toast.makeText(CommentActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(CommentEntity.COLUMN_CONTENT_ID,c.contentId);
+                                contentValues.put(CommentEntity.COLUMN_ADD_TIME,c.timestamp);
+                                contentValues.put(CommentEntity.COLUMN_CONTENT,c.content);
+                                contentValues.put(CommentEntity.COLUMN_ID,c.id);
+                                getContentResolver().insert(CommentEntity.buildWithContentIDUrl(mContentId), contentValues);
                                 finish();
                             }
                         }, new Action1<Throwable>() {

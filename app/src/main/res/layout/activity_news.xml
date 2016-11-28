@@ -102,6 +102,15 @@
                     android:textSize="@dimen/body"
                     tools:text="隐退" />
 
+                <!--<WebView-->
+                    <!--android:id="@+id/body"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginTop="4dp"-->
+                    <!--android:textColor="@color/primary_text_dark"-->
+                    <!--android:textSize="@dimen/body"-->
+                    <!--tools:text="隐退" />-->
+
 
                 <View
                     android:layout_width="match_parent"
@@ -116,11 +125,6 @@
                     android:text="评论"
                     android:textColor="@color/primary_text_dark"
                     android:textSize="@dimen/title" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
-
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/comment_list"

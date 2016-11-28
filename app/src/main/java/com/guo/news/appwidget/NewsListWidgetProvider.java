@@ -47,7 +47,7 @@ public class NewsListWidgetProvider extends AppWidgetProvider {
 
             // set news list
             Intent adapterIntent = new Intent(context,NewsListRemoteViewService.class);
-            adapterIntent.putExtra(NewsListRemoteViewService.KEY_SECTION_ID, sectionId);
+//            adapterIntent.putExtra(NewsListRemoteViewService.KEY_SECTION_ID, sectionId);
             remoteViews.setRemoteAdapter(R.id.news_list,adapterIntent);
 
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -60,6 +60,7 @@ public class NewsListWidgetProvider extends AppWidgetProvider {
 
             remoteViews.setEmptyView(R.id.news_list,R.id.empty);
 
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.news_list);
             appWidgetManager.updateAppWidget(appWidgetId,remoteViews);
         }
 

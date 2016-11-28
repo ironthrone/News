@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/setting"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_settings"
-        android:title="Set" />
-    <item
         android:id="@+id/select"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_add_black_24dp"
         android:title="Select" />
+    <item
+        android:id="@+id/setting"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_settings"
+        android:title="Set" />
 </menu>

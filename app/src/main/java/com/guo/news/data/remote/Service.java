@@ -9,6 +9,8 @@ import com.guo.news.data.model.SectionModel;
 import java.util.List;
 
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -40,10 +42,11 @@ public interface Service {
                                                                         @Query("to-date") String toDate);
 
 
-    @GET("https://get20000.herokuapp.com/list")
-    Observable<ResponseModel<List<CommentModel>>> getCommentList(@Query("content-id") String contentId,
-                                                                 @Query("page") Integer page);
+    @POST("https://get20000.herokuapp.com/comment/list")
+    @FormUrlEncoded
+    Observable<ResponseModel<List<CommentModel>>> getCommentList(@Field("contentId") String contentId,
+                                                                 @Field("page") Integer page);
 
-    @POST("https://get20000.herokuapp.com/add")
-    Observable<ResponseModel<String>> addComment(@Body CommentModel co);
+    @POST("https://get20000.herokuapp.com/comment/add")
+    Observable<ResponseModel<CommentModel>> addComment(@Body CommentModel co);
 }

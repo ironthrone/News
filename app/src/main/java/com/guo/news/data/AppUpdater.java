@@ -21,6 +21,7 @@ public class AppUpdater {
     private static final String APP_NAME = "News.apk";
     private final Uri destinationUri;
     private final Context mContext;
+    private static final String UPDATE_URL = "https://get20000.herokuapp.com/update";
 
     public AppUpdater(Context context) {
         mContext = context;
@@ -39,13 +40,14 @@ public class AppUpdater {
     public void update() {
         if (!downloading) {
 
-            Uri fileUri = Uri.parse("https://get20000.herokuapp.com/apk");
+
+            Uri fileUri = Uri.parse(UPDATE_URL);
             DownloadManager.Request request = new DownloadManager.Request(fileUri);
             request.setVisibleInDownloadsUi(true);
             request.setDestinationUri(destinationUri);
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-            request.setTitle("Downloading news apk ...");
+            request.setTitle("Downloading News apk ...");
             id = downloadManager.enqueue(request);
             downloading = true;
         } else {

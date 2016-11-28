@@ -27,6 +27,7 @@ public class DownloadPreference extends Preference {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         AppUpdater.getInstance(getContext()).update();
+                        dialog.dismiss();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override

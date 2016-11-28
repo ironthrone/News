@@ -81,8 +81,8 @@ public class Utility {
             ContentValues contentValues = new ContentValues();
             contentValues.put(CommentEntity.COLUMN_ID, commentModel.id);
             contentValues.put(CommentEntity.COLUMN_CONTENT, commentModel.content);
-            contentValues.put(CommentEntity.COLUMN_CONTENT_ID, commentModel.news_id);
-            contentValues.put(CommentEntity.COLUMN_ADD_TIME, commentModel.date);
+            contentValues.put(CommentEntity.COLUMN_CONTENT_ID, commentModel.contentId);
+            contentValues.put(CommentEntity.COLUMN_ADD_TIME, commentModel.timestamp);
             contentValuesArray[i] = contentValues;
         }
         return context.getContentResolver().bulkInsert(CommentEntity.CONTENT_URI, contentValuesArray);

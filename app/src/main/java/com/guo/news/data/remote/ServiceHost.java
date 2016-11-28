@@ -31,13 +31,17 @@ public class ServiceHost {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request origin = chain.request();
-                HttpUrl url = origin.url().newBuilder().addQueryParameter("api-key", API_KEY)
-                        .build();
-                origin = origin.newBuilder().url(url).build();
+                String host = origin.url().host();
+                if (!host.contains("herokuapp")) {
+
+                    HttpUrl url = origin.url().newBuilder().addQueryParameter("api-key", API_KEY)
+                            .build();
+                    origin = origin.newBuilder().url(url).build();
+                }
                 return chain.proceed(origin);
             }
         });
-        HttpLoggingInterceptor.Level logLevel = BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE;
+        HttpLoggingInterceptor.Level logLevel = BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE;
         clientBuilder.addInterceptor(new HttpLoggingInterceptor().setLevel(logLevel));
     }
 
@@ -52,8 +56,8 @@ public class ServiceHost {
 
     public static Service getService() {
         if (mService == null) {
-        mService = retrofitBuilder.client(clientBuilder.build())
-                .build().create(Service.class);
+            mService = retrofitBuilder.client(clientBuilder.build())
+                    .build().create(Service.class);
 
         }
         return mService;

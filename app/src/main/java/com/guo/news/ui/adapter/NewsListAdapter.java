@@ -3,6 +3,7 @@ package com.guo.news.ui.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
                 .into(holder.image);
         holder.title.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
         holder.date.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
-        holder.stand_first.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT)));
+        holder.stand_first.setText(Html.fromHtml(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT))));
 
     }
 

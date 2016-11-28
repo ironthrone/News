@@ -49,7 +49,7 @@ public class CommentAdapter extends RecyclerViewCursorAdapter<CommentAdapter.Vie
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

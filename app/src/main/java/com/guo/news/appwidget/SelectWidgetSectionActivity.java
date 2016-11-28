@@ -34,11 +34,13 @@ public class SelectWidgetSectionActivity extends AppCompatActivity implements Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String where = NewsContract.SectionEntity.COLUMN_INSTERTED + " = ?";
+        String[] whereArgs = new String[]{"1"};
         return new CursorLoader(this,
                 NewsContract.SectionEntity.CONTENT_URI,
                 null,
-                null,
-                null,
+                where,
+                whereArgs,
                 null);
     }
 
