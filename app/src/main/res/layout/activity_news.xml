@@ -148,6 +148,7 @@
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_edit_white_24dp"
         app:elevation="@dimen/fab_elevation"
-        app:layout_behavior="com.guo.news.ui.widget.HideBehavior"
+        app:layout_behavior="com.guo.news.ui.widget.ScaleBehavior"
         app:pressedTranslationZ="6dp" />
+        <!--app:layout_behavior="com.guo.news.ui.widget.MovementBehavior"-->
 </android.support.design.widget.CoordinatorLayout>

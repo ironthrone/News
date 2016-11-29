@@ -12,7 +12,8 @@ import android.view.WindowManager;
 /**
  * Created by Administrator on 2016/7/15.
  */
-public class HideBehavior extends CoordinatorLayout.Behavior {
+public class MovementBehavior extends CoordinatorLayout.Behavior {
+    private static final String TAG = MovementBehavior.class.getSimpleName();
     private  Context mContext;
     private final DisplayMetrics displayMetrics;
     //init y ,before nested scroll
@@ -20,7 +21,7 @@ public class HideBehavior extends CoordinatorLayout.Behavior {
     private boolean show;
 
 
-    public HideBehavior(Context context, AttributeSet attrs) {
+    public MovementBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
