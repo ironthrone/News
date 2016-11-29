@@ -2,9 +2,6 @@ package com.guo.news.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -18,7 +15,6 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,19 +25,15 @@ import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.remote.ResultTransformer;
 import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.CommentAdapter;
-import com.guo.news.ui.widget.PicassoImageGetter;
+import com.guo.news.ui.widget.AsyncImageGetter;
 import com.guo.news.util.Utility;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Observable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -88,13 +80,17 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mCommentAdapter = new CommentAdapter(this, null);
         comment_list.setAdapter(mCommentAdapter);
 
+        loadData();
+    }
 
+
+    private void loadData() {
         if (mContentId != null) {
             getSupportLoaderManager().initLoader(NEWS_LOADER, null, this);
             getSupportLoaderManager().initLoader(COMMENTS_LOADER, null, this);
         }
-
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,26 +122,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-//    private Html.ImageGetter imageGetter = new Html.ImageGetter() {
-//        @Override
-//        public Drawable getDrawable(final String source) {
-//            rx.Observable.create(new rx.Observable.OnSubscribe<Drawable>() {
-//                @Override
-//                public void call(Subscriber<? super Drawable> subscriber) {
-//                    try {
-//                        Bitmap image = Picasso.with(getApplicationContext())
-//                                .load(source)
-//                                .get();
-//                        subscriber.onNext(new BitmapDrawable(getResources(), image));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//
-//        }
-//    };
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -153,15 +129,17 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             case NEWS_LOADER:
                 if (data.moveToFirst()) {
                     title.setText(data.getString(data.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
-                    date.setText(data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
+                    date.setText(Utility.removeCharInDate(data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE))));
                     byline.setText(data.getString(data.getColumnIndex(ContentEntity.COLUMN_BYLINE)));
-//                    body.loadData(data.getString(data.getColumnIndex(ContentEntity.COLUMN_BODY)), "text/html", "utf-8");
 
-                    body.setText(Html.fromHtml(data.getString(data.getColumnIndex(ContentEntity.COLUMN_BODY)), new PicassoImageGetter(getApplicationContext(),body), null));
+                    Html.ImageGetter imageGetter = new AsyncImageGetter(getApplicationContext(), body);
+
+                    body.setText(Html.fromHtml(data.getString(data.getColumnIndex(ContentEntity.COLUMN_BODY)), imageGetter, null));
                     body.setMovementMethod(LinkMovementMethod.getInstance());
                     Picasso.with(this)
                             .load(data.getString(data.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL)))
                             .into(news_image);
+
 //                    Palette palette = Palette.from(((BitmapDrawable) news_image.getDrawable()).getBitmap())
 //                            .generate();
 //                    Palette.Swatch vibrant = palette.getVibrantSwatch();

@@ -31,6 +31,8 @@ import com.guo.news.util.DateUtils;
 import com.guo.news.util.MeasureConverter;
 import com.guo.news.util.Utility;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -84,7 +86,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         super.onCreate(savedInstanceState);
         mSectionId = getArguments().getString(KEY_SECTION_ID);
         if (mSectionId == null) {
-            Log.d(TAG, "section id is null ");
+            Log.d(TAG, "section _id is null ");
         }
         mLastDateInCP = DateUtils.format(System.currentTimeMillis(), DATE_TEMPLE);
         mLoadMoreListener = new LinearLoadMoreScrollListener() {

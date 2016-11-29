@@ -30,6 +30,7 @@
             android:layout_marginTop="4dp"
             android:layout_toRightOf="@id/image"
             android:textAllCaps="true"
+            android:maxLines="4"
             android:textColor="@color/primary_text_dark"
             android:textSize="@dimen/title"
             tools:text="号外号外" />

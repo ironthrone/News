@@ -3,6 +3,7 @@ package com.guo.news.ui.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.CommentEntity;
 import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
+import com.guo.news.util.Utility;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,7 +29,7 @@ public class CommentAdapter extends RecyclerViewCursorAdapter<CommentAdapter.Vie
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
         holder.comment_body.setText(cursor.getString(cursor.getColumnIndex(CommentEntity.COLUMN_CONTENT)));
-        holder.comment_date.setText(cursor.getString(cursor.getColumnIndex(CommentEntity.COLUMN_ADD_TIME)));
+        holder.comment_date.setText(Utility.formatTime(cursor.getLong(cursor.getColumnIndex(CommentEntity.COLUMN_ADD_TIME))));
     }
 
     @Override

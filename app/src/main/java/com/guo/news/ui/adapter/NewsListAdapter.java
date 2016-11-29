@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.ContentEntity;
 import com.guo.news.ui.widget.RecyclerViewCursorAdapter;
+import com.guo.news.util.Utility;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -54,7 +55,7 @@ public class NewsListAdapter extends RecyclerViewCursorAdapter<NewsListAdapter.V
                 .load(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_THUMBNAIL)))
                 .into(holder.image);
         holder.title.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
-        holder.date.setText(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE)));
+        holder.date.setText(Utility.removeCharInDate(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE))));
         holder.stand_first.setText(Html.fromHtml(mCursor.getString(mCursor.getColumnIndex(ContentEntity.COLUMN_TRAIL_TEXT))));
 
     }

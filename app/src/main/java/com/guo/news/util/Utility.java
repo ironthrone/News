@@ -21,8 +21,18 @@ import java.util.Locale;
  * Created by Administrator on 2016/9/25.
  */
 public class Utility {
+    public static String removeCharInDate(String date) {
+        return date.replaceAll("[a-zA-Z]", " ");
+    }
+
+    public static String formatTime(long time) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        return dateFormat.format(new Date(time));
+    }
+
     public static long getTimeStamp(String dateStr) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss", Locale.getDefault());
+        dateStr = removeCharInDate(dateStr);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
         Date date = null;
         try {
             date = format.parse(dateStr);
@@ -30,7 +40,6 @@ public class Utility {
             e.printStackTrace();
         }
         return date == null ? -1 : date.getTime();
-
     }
 
     public static int insertSections(Context context, List<SectionModel> sectionModels) {
@@ -48,19 +57,11 @@ public class Utility {
 
     public static int insertContents(Context context,List<ContentModel> contentModels) {
         ContentValues[] contentValuesArray = new ContentValues[contentModels.size()];
-//        DateFormat df = new SimpleDateFormat("yyyy-MM-hh hh:mm:ss");
         for (int i = 0; i < contentModels.size() ; i++ ) {
             ContentModel contentModel = contentModels.get(i);
             ContentValues contentValues = new ContentValues();
             contentValues.put(ContentEntity.COLUMN_ID, contentModel.id);
             contentValues.put(ContentEntity.COLUMN_SECTION_ID, contentModel.sectionId);
-//            try {
-//                String formattedTime = contentModel.webPublicationDate.replaceAll("A-Z", " ");
-//                long publishTime = df.parse(formattedTime).getTime();
-//                contentValue.put(ContentEntity.COLUMN_WEB_PUBLICATION_DATE, publishTime);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
             contentValues.put(ContentEntity.COLUMN_WEB_PUBLICATION_DATE, contentModel.webPublicationDate);
             contentValues.put(ContentEntity.COLUMN_WEB_URL, contentModel.webUrl);
             contentValues.put(ContentEntity.COLUMN_HEADLINE, contentModel.fields.headline);
@@ -79,7 +80,7 @@ public class Utility {
         for (int i = 0; i < commentModels.size() ; i++ ) {
             CommentModel commentModel = commentModels.get(i);
             ContentValues contentValues = new ContentValues();
-            contentValues.put(CommentEntity.COLUMN_ID, commentModel.id);
+            contentValues.put(CommentEntity.COLUMN_ID, commentModel._id);
             contentValues.put(CommentEntity.COLUMN_CONTENT, commentModel.content);
             contentValues.put(CommentEntity.COLUMN_CONTENT_ID, commentModel.contentId);
             contentValues.put(CommentEntity.COLUMN_ADD_TIME, commentModel.timestamp);

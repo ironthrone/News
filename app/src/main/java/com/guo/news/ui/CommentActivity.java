@@ -3,7 +3,6 @@ package com.guo.news.ui;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.ConditionVariable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.guo.news.R;
-import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.local.NewsContract.CommentEntity;
 import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.remote.ResultTransformer;
@@ -108,11 +106,7 @@ public class CommentActivity extends AppCompatActivity {
                     Toast.makeText(CommentActivity.this, "comment is null", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                 CommentModel commentModel = new CommentModel();
-                commentModel.content = commentStr;
-                commentModel.contentId = mContentId;
-
-                ServiceHost.getService().addComment(commentModel)
+                ServiceHost.getService().addComment(mContentId,commentStr)
                         .subscribeOn(Schedulers.io())
                         .map(new ResultTransformer<CommentModel>())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -120,13 +114,13 @@ public class CommentActivity extends AppCompatActivity {
                             @Override
                             public void call(CommentModel c) {
                                 Toast.makeText(CommentActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                finish();
                                 ContentValues contentValues = new ContentValues();
                                 contentValues.put(CommentEntity.COLUMN_CONTENT_ID,c.contentId);
                                 contentValues.put(CommentEntity.COLUMN_ADD_TIME,c.timestamp);
                                 contentValues.put(CommentEntity.COLUMN_CONTENT,c.content);
-                                contentValues.put(CommentEntity.COLUMN_ID,c.id);
-                                getContentResolver().insert(CommentEntity.buildWithContentIDUrl(mContentId), contentValues);
-                                finish();
+                                contentValues.put(CommentEntity.COLUMN_ID,c._id);
+                                getContentResolver().insert(CommentEntity.CONTENT_URI, contentValues);
                             }
                         }, new Action1<Throwable>() {
                             @Override

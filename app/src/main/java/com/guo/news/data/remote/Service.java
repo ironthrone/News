@@ -48,5 +48,7 @@ public interface Service {
                                                                  @Field("page") Integer page);
 
     @POST("https://get20000.herokuapp.com/comment/add")
-    Observable<ResponseModel<CommentModel>> addComment(@Body CommentModel co);
+    @FormUrlEncoded
+    Observable<ResponseModel<CommentModel>> addComment(@Field("contentId") String contentId,
+                                                       @Field("content") String content);
 }

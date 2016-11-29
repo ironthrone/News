@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_overlapTop="40dp"
+        android:transitionGroup="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -58,8 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp">
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp">
 
                 <TextView
                     android:id="@+id/title"
@@ -103,7 +104,7 @@
                     tools:text="隐退" />
 
                 <!--<WebView-->
-                    <!--android:id="@+id/body"-->
+                    <!--android:_id="@+_id/body"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="match_parent"-->
                     <!--android:layout_marginTop="4dp"-->

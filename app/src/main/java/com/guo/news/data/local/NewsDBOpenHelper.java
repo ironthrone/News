@@ -38,7 +38,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 ");";
         final String CREATE_COMMENT_TABLE = "create table " + CommentEntity.TABLE_NAME + "(" +
                 CommentEntity._ID + " integer primary key autoincrement," +
-                CommentEntity.COLUMN_ID + " integer unique not null," +
+                CommentEntity.COLUMN_ID + " text unique not null," +
                 CommentEntity.COLUMN_CONTENT_ID + " text not null," +
                 CommentEntity.COLUMN_CONTENT + " text not null," +
                 CommentEntity.COLUMN_ADD_TIME + " integer not null," +
@@ -46,7 +46,7 @@ public class NewsDBOpenHelper extends SQLiteOpenHelper {
                 ");";
 
         final String CREATE_SECTION_TABLE = "create table " + SectionEntity.TABLE_NAME + "(" +
-                SectionEntity._ID + " text primary key," +
+                SectionEntity._ID + " integer primary key," +
                 SectionEntity.COLUMN_ID + " text unique not null," +
                 SectionEntity.COLUMN_WEB_TITLE + " text not null," +
                 SectionEntity.COLUMN_INSTERTED + " integer default 0," +
