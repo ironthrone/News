@@ -13,11 +13,15 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.guo.news.NewsApplication;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.remote.NewsSyncAdapter;
@@ -53,8 +57,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportLoaderManager().initLoader(SECTION_LOADER, null, this);
 
         NewsSyncAdapter.initializeSync(getApplicationContext());
+
+        ((NewsApplication) getApplication()).startTracker();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tracker tracker = ((NewsApplication) getApplication()).getTracker();
+        tracker.setScreenName("Main Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

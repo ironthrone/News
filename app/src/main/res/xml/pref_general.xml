@@ -11,7 +11,8 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_sync_frequency" />
 
-    <com.guo.news.ui.widget.DownloadPreference
+    <Preference
+        android:key="@string/pref_download_key"
         android:title="Check update" />
 
 </PreferenceScreen>

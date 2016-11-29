@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
 
@@ -54,5 +55,5 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.beloo.widget:ChipsLayoutManager:0.2.4@aar'
-
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
 }

@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.test.mock.MockApplication;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +15,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.guo.news.NewsApplication;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.CommentEntity;
 import com.guo.news.data.model.CommentModel;
@@ -54,6 +58,13 @@ public class CommentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tracker tracker = ((NewsApplication) getApplication()).getTracker();
+        tracker.setScreenName("Comment Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -101,6 +112,14 @@ public class CommentActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.publish:
+
+                Tracker tracker = ((NewsApplication) getApplication()).getTracker();
+                tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Comment")
+                .setAction("Comment")
+                .setLabel("Add a comment")
+                .build());
+
                 String commentStr = comment.getText().toString().trim();
                 if (TextUtils.isEmpty(commentStr)) {
                     Toast.makeText(CommentActivity.this, "comment is null", Toast.LENGTH_SHORT).show();

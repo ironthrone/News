@@ -40,4 +40,5 @@
         <item>360</item>
     </string-array>
 
+    <string name="pref_download_key">download</string>
 </resources>

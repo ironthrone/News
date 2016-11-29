@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "715989613738",
+    "project_id": "news-7ad18"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715989613738:android:e27338d790863776",
+        "android_client_info": {
+          "package_name": "com.guo.news"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuCA_YsnnVvSR1FVuQ9wEfhqDuqJNyz9k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-88047275-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
