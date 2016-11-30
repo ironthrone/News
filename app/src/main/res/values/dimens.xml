@@ -5,7 +5,7 @@
 
     <dimen name="button">15sp</dimen>
     <dimen name="caption">13sp</dimen>
-    <dimen name="body">14dp</dimen>
+    <dimen name="body">14sp</dimen>
     <dimen name="subheading">17sp</dimen>
     <dimen name="title">21sp</dimen>
     <dimen name="headline">24sp</dimen>

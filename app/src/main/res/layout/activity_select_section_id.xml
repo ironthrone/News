@@ -14,7 +14,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        app:title="Select widget section"
+        app:title="@string/label_select_sections"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
     </android.support.design.widget.AppBarLayout>

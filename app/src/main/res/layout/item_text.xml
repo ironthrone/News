@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:background="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
+    android:gravity="left|start|center_vertical"
     android:textAppearance="?android:attr/textAppearanceListItem"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"

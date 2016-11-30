@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="guo.com"
+    android:accountType="@string/account_type"
     android:contentAuthority="@string/news_provider_authority"
     android:userVisible="false"
     android:supportsUploading="false"

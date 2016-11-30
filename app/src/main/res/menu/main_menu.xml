@@ -5,10 +5,10 @@
         android:id="@+id/select"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_add_black_24dp"
-        android:title="Select" />
+        android:title="@string/action_select_section" />
     <item
         android:id="@+id/setting"
         app:showAsAction="always"
         android:icon="@drawable/ic_settings"
-        android:title="Set" />
+        android:title="@string/title_activity_settings" />
 </menu>

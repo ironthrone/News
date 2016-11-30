@@ -4,7 +4,7 @@
     <string name="account_type">guo.com</string>
     <string name="account_name">dummyAccount</string>
     <string name="news_provider_authority">com.guo.news</string>
-    <string name="transition_content_image">contentImage</string>
+    <string name="transition_share_image">shareImage</string>
     <string name="title_activity_settings">Settings</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
@@ -13,20 +13,16 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
-
-
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string name="pref_sync_frequency_key">sync_frequency</string>
     <string name="pref_sync_frequency_default">180</string>
     <string-array name="pref_sync_frequency_titles">
-        <item>1 minute</item>
         <item>30 minutes</item>
         <item>1 hour</item>
         <item>3 hours</item>
         <item>6 hours</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
-        <item>1</item>
         <item>30</item>
         <item>60</item>
         <item>180</item>
@@ -34,4 +30,15 @@
     </string-array>
 
     <string name="pref_download_key">download</string>
+    <string name="action_select_section">Select</string>
+    <string name="publish">Publish</string>
+    <string name="comments">Comments</string>
+    <string name="label_select_interested_section">Select Your Interested Sections</string>
+    <string name="label_select_sections">Select widget section</string>
+    <string name="guest">Guest</string>
+    <string name="widget_empty_list_prompt">Hold on! I\'m loading</string>
+    <string name="add_a_comment">Add a comment</string>
+    <string name="return_to_last_activity">Return to last activity</string>
+    <string name="write_comment">Write comment</string>
+    <string name="share">Share</string>
 </resources>

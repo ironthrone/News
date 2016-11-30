@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:fitsSystemWindows="true"
     tools:context="com.guo.news.ui.NewsActivity">
 
@@ -23,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/news_image"
-                android:transitionName="@string/transition_content_image"
+                android:transitionName="@string/transition_share_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -32,6 +33,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                app:navigationContentDescription="@string/return_to_last_activity"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
@@ -123,7 +125,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="评论"
+                    android:gravity="left|start"
+                    android:text="@string/comments"
                     android:textColor="@color/primary_text_dark"
                     android:textSize="@dimen/title" />
 
@@ -142,6 +145,7 @@
         android:id="@+id/add_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/add_a_comment"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"

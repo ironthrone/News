@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.remote.NewsSyncAdapter;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         AdRequest adRequest = new AdRequest.Builder().build();
         banner_ad.loadAd(adRequest);
+
+//        FirebaseCrash.report(new Exception("Just a test"));
     }
 
     @Override

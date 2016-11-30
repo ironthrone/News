@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             app:elevation="@dimen/appbar_elevation"
             app:navigationIcon="@drawable/ic_close_black_24dp"
-            app:title="Select Your Interested Sections" />
+            app:title="@string/label_select_interested_section" />
     </android.support.design.widget.AppBarLayout>
 
     <!--<android.support.v4.widget.NestedScrollView-->

@@ -31,8 +31,6 @@ import com.guo.news.util.DateUtils;
 import com.guo.news.util.MeasureConverter;
 import com.guo.news.util.Utility;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -228,7 +226,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onItemClick(NewsListAdapter.ViewHolder holder, String contentId) {
         Intent intent = new Intent(getContext(), NewsActivity.class);
         intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), holder.image, getString(R.string.transition_content_image));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), holder.image, getString(R.string.transition_share_image));
         startActivity(intent,options.toBundle());
 
     }

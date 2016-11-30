@@ -7,14 +7,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +33,7 @@ import com.guo.news.ui.widget.AsyncImageGetter;
 import com.guo.news.util.Utility;
 import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,13 +61,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     TextView byline;
     @Bind(R.id.body)
     TextView body;
-    @Bind(R.id.add_comment)
-    FloatingActionButton add_comment;
     @Bind(R.id.comment_list)
     RecyclerView comment_list;
 
     private String mContentId;
     private CommentAdapter mCommentAdapter;
+    private ShareActionProvider mShareActionProvider;
+    private String mShareUrl;
 
 
     @Override
@@ -80,7 +85,25 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         mCommentAdapter = new CommentAdapter(this, null);
         comment_list.setAdapter(mCommentAdapter);
 
+        mShareActionProvider = new ShareActionProvider(this){
+            @Override
+            public View onCreateActionView() {
+                return null;
+            }
+        };
+
         loadData();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.news_menu, menu);
+//        MenuItem shareItem = menu.findItem(R.id.share);
+//        shareItem.setActionProvider(mShareActionProvider);
+//        MenuItemCompat.setActionProvider(shareItem, mShareActionProvider);
+//        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        return super.onCreateOptionsMenu(menu);
     }
 
 
@@ -94,11 +117,20 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            supportFinishAfterTransition();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+            case R.id.share:
+                if (mShareUrl != null) {
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT, mShareUrl);
+                    startActivity(Intent.createChooser(share, "Send to"));
+                }
+                return true;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -128,6 +160,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (loader.getId()) {
             case NEWS_LOADER:
                 if (data.moveToFirst()) {
+                    mShareUrl = data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_URL));
+
                     title.setText(data.getString(data.getColumnIndex(ContentEntity.COLUMN_HEADLINE)));
                     date.setText(Utility.removeCharInDate(data.getString(data.getColumnIndex(ContentEntity.COLUMN_WEB_PUBLICATION_DATE))));
                     byline.setText(data.getString(data.getColumnIndex(ContentEntity.COLUMN_BYLINE)));
