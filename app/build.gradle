@@ -34,7 +34,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'GUARDIAN_API_KEY', "\"b0916566-aeb6-444e-b04d-682097eafba8\""
+        it.buildConfigField 'String', 'GUARDIAN_API_KEY', "\"FILL YOUR KEY\""
     }
 }
 
