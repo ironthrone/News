@@ -13,15 +13,13 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.guo.news.NewsApplication;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.guo.news.R;
 import com.guo.news.data.AppUpdater;
 import com.guo.news.data.remote.NewsSyncAdapter;
 
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends AppCompatPreferenceActivity implements Preference.OnPreferenceClickListener {
 
 
     @Override
@@ -40,34 +38,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         ListPreference syncPreference = (ListPreference) findPreference(getString(R.string.pref_sync_frequency_key));
         syncPreference.setSummary(getPreferenceManager().getSharedPreferences()
                 .getString(getString(R.string.pref_sync_frequency_key), getString(R.string.pref_sync_frequency_default)));
-        Preference downloadPreference =  findPreference(getString(R.string.pref_download_key));
-        downloadPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new AlertDialog.Builder(SettingsActivity.this)
-                        .setTitle("Confirm to update")
-                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                AppUpdater.getInstance(getApplicationContext()).update();
-                                dialog.dismiss();
-                                Tracker tracker = ((NewsApplication) getApplication()).getTracker();
-                                tracker.send(new HitBuilders.EventBuilder()
-                                        .setCategory("Setting")
-                                        .setAction("Download")
-                                        .setLabel("Download")
-                                        .build());
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-                return false;
-            }
-        });
-
         syncPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -78,6 +48,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         });
 
+        findPreference(getString(R.string.pref_download_key)).setOnPreferenceClickListener(this);
     }
 
 
@@ -109,4 +80,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return false;
     }
 
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals(getString(R.string.pref_download_key))) {
+
+            new AlertDialog.Builder(SettingsActivity.this)
+                    .setTitle("Confirm to update")
+                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppUpdater.getInstance(getApplicationContext()).update();
+                            dialog.dismiss();
+                            FirebaseAnalytics.getInstance(getApplicationContext())
+                                    .logEvent("Update", new Bundle());
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+        return false;
+    }
 }

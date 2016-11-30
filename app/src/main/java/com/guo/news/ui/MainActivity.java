@@ -13,22 +13,19 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.guo.news.NewsApplication;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract;
 import com.guo.news.data.remote.NewsSyncAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -41,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TabLayout tab_layout;
     @Bind(R.id.view_pager)
     ViewPager view_pager;
+    @Bind(R.id.banner_ad)
+    AdView banner_ad;
     private NewsFragmentPagerAdapter mNewsFragmentPagerAdapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +58,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         NewsSyncAdapter.initializeSync(getApplicationContext());
 
-        ((NewsApplication) getApplication()).startTracker();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        banner_ad.loadAd(adRequest);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Tracker tracker = ((NewsApplication) getApplication()).getTracker();
-        tracker.setScreenName("Main Screen");
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getApplicationContext());
+        Bundle bundle = new Bundle();
+        bundle.putString("Screen","Main");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.setting:
-                startActivity(new Intent(this,SettingsActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.select:
                 Intent intent = new Intent(this, SelectInterestedSectionActivity.class);
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public void setCursor(Cursor cursor) {
             mSectionCursor = cursor;
         }
+
         public void removeCursor() {
             mSectionCursor = null;
         }
@@ -142,14 +145,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            if (mSectionCursor.moveToPosition(position)) {
 
             mSectionCursor.moveToPosition(position);
-                return NewsListFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
+            return NewsListFragment.getInstance(mSectionCursor.getString(mSectionCursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID)));
 //            }
 //            return null;
         }
 
         @Override
         public int getCount() {
-            if(mSectionCursor == null) return 0;
+            if (mSectionCursor == null) return 0;
             return mSectionCursor.getCount();
         }
 

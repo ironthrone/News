@@ -1,35 +1,39 @@
 {
   "project_info": {
-    "project_number": "715989613738",
-    "project_id": "news-7ad18"
+    "project_number": "1094608968347",
+    "firebase_url": "https://news-59037.firebaseio.com",
+    "project_id": "news-59037",
+    "storage_bucket": "news-59037.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:715989613738:android:e27338d790863776",
+        "mobilesdk_app_id": "1:1094608968347:android:e27338d790863776",
         "android_client_info": {
           "package_name": "com.guo.news"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1094608968347-6t0b3lplu8fq43deja68vtmjhk8lb57o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDuCA_YsnnVvSR1FVuQ9wEfhqDuqJNyz9k"
+          "current_key": "AIzaSyBUD-b50YVbj2GkBj11MiSKG7I_Xf73YNo"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-88047275-1"
-          }
+          "status": 1
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

@@ -15,8 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.guo.news.NewsApplication;
 import com.guo.news.R;
 import com.guo.news.data.local.NewsContract.CommentEntity;
@@ -61,9 +60,6 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Tracker tracker = ((NewsApplication) getApplication()).getTracker();
-        tracker.setScreenName("Comment Screen");
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
@@ -112,13 +108,8 @@ public class CommentActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.publish:
-
-                Tracker tracker = ((NewsApplication) getApplication()).getTracker();
-                tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Comment")
-                .setAction("Comment")
-                .setLabel("Add a comment")
-                .build());
+                FirebaseAnalytics.getInstance(getApplicationContext())
+                        .logEvent("AddComment",new Bundle());
 
                 String commentStr = comment.getText().toString().trim();
                 if (TextUtils.isEmpty(commentStr)) {
