@@ -41,4 +41,6 @@
     <string name="return_to_last_activity">Return to last activity</string>
     <string name="write_comment">Write comment</string>
     <string name="share">Share</string>
+    <string name="appwidget_setting_description">Change the section shown in the widget</string>
+    <string name="share_chooser_title">Share the news to</string>
 </resources>

@@ -126,7 +126,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
                     share.putExtra(Intent.EXTRA_TEXT, mShareUrl);
-                    startActivity(Intent.createChooser(share, "Send to"));
+                    startActivity(Intent.createChooser(share, getString(R.string.share_chooser_title)));
                 }
                 return true;
         }

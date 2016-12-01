@@ -28,6 +28,7 @@ import com.guo.news.ui.MainActivity;
 import com.guo.news.util.Utility;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -41,7 +42,7 @@ import rx.functions.Func1;
 public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = NewsSyncAdapter.class.getSimpleName();
-    private int mUpdatedSectionCount;
+//    private int mUpdatedSectionCount;
 
     public NewsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -59,7 +60,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider,
                               SyncResult syncResult) {
 
-        Log.d(TAG, "perform sync");
+        Log.d(TAG, "perform sync at " + new Date());
 
         ServiceHost.getService().getSectionList()
                 .map(new ResultTransformer<List<SectionModel>>())
@@ -94,7 +95,7 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
                                 do {
-                                    mUpdatedSectionCount++;
+//                                    mUpdatedSectionCount++;
                                     String sectionId = cursor.getString(cursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID));
                                     randomLoadSections.add(sectionId);
                                     if (setWidgetSection) {
@@ -128,87 +129,18 @@ public class NewsSyncAdapter extends AbstractThreadedSyncAdapter {
                     public void call(List<ContentModel> contentModels) {
                         Log.d(TAG, "pull content successful");
                         Utility.insertContents(getContext(), contentModels);
-                        mUpdatedSectionCount--;
-                        if (mUpdatedSectionCount == 0) {
+//                        mUpdatedSectionCount--;
+//                        if (mUpdatedSectionCount == 0) {
                             notifyUser();
-                        }
+//                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        mUpdatedSectionCount--;
+//                        mUpdatedSectionCount--;
                         throwable.printStackTrace();
                     }
                 });
-
-//        ServiceHost.getService().getSectionList()
-//                .map(new ResultTransformer<List<SectionModel>>())
-//                .subscribe(new Action1<List<SectionModel>>() {
-//                    @Override
-//                    public void call(List<SectionModel> sectionModels) {
-//                        String where = NewsContract.SectionEntity.COLUMN_INSTERTED + " = ?";
-//                        String[] whereArgs = new String[]{"1"};
-//                        Cursor cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
-//                                null, where, whereArgs, null);
-//                        if (cursor != null && cursor.getCount() == 0) {
-//                            int sectionNum = sectionModels.size();
-//                            Random random = new Random();
-//                            for (int i = 0; i < 6; i++) {
-//                                sectionModels.get(random.nextInt(sectionNum)).insterested = true;
-//                            }
-//                        }
-//
-//                        int insertedRows = Utility.insertSections(getContext(), sectionModels);
-//                        Log.d(TAG, "insert section for " + insertedRows + " rows");
-//
-//                        // sync the interested section
-//                        cursor = getContext().getContentResolver().query(NewsContract.SectionEntity.CONTENT_URI,
-//                                null, where, whereArgs, null);
-//
-//                        if (cursor != null && cursor.moveToFirst()) {
-//                            try {
-//
-//                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//                                String widgetSectionId = sharedPreferences.getString(PreferenceConstant.KEY_APP_WIDGET_SECTION, PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
-//                                boolean setWidgetSection = widgetSectionId.equals(PreferenceConstant.APP_WIDGET_SECTION_DEFAULT);
-//
-//
-//                                do {
-//                                    String sectionId = cursor.getString(cursor.getColumnIndex(NewsContract.SectionEntity.COLUMN_ID));
-//
-//                                    if (setWidgetSection) {
-//
-//                                        sharedPreferences.edit().putString(PreferenceConstant.KEY_APP_WIDGET_SECTION, sectionId).apply();
-//                                        setWidgetSection = false;
-//                                    }
-//
-//                                    Log.d(TAG, "pull content from section: " + sectionId);
-//                                    ServiceHost.getService().getContentFromSection(sectionId, null, 50, null, null)
-//                                            .map(new ResultTransformer<List<ContentModel>>())
-//                                            .subscribe(new Action1<List<ContentModel>>() {
-//                                                @Override
-//                                                public void call(List<ContentModel> contentModels) {
-//                                                    Log.d(TAG, "pull content successful");
-//                                                    Utility.insertContents(getContext(), contentModels);
-//                                                }
-//                                            }, new Action1<Throwable>() {
-//                                                @Override
-//                                                public void call(Throwable throwable) {
-//                                                    throwable.printStackTrace();
-//                                                }
-//                                            });
-//                                } while (cursor.moveToNext());
-//                            } finally {
-//                                cursor.close();
-//                            }
-//                        }
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        throwable.printStackTrace();
-//                    }
-//                });
     }
 
     private void notifyUser() {

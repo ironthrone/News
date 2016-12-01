@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
     android:orientation="vertical"
     app:cardCornerRadius="2dp"
     app:cardElevation="4dp">
 
+        <!--android:clickable="true"-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="4dp">
 
         <ImageView
@@ -29,10 +31,10 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/image"
             android:layout_toEndOf="@id/image"
-            android:textAllCaps="true"
+            android:layout_toRightOf="@id/image"
             android:maxLines="4"
+            android:textAllCaps="true"
             android:textColor="@color/primary_text_dark"
             android:textSize="@dimen/title"
             tools:text="号外号外" />
@@ -41,8 +43,8 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/title"
             android:layout_marginTop="6dp"
             android:textColor="@color/second_text_dark"

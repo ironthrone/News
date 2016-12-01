@@ -1,9 +1,12 @@
 package com.guo.news.ui.widget;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -25,20 +28,17 @@ public class ScaleBehavior extends CoordinatorLayout.Behavior {
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, View child, View directTargetChild, View target, int nestedScrollAxes) {
-//        if (child instanceof FloatingActionButton) {
-//            return true;
-//        }
-//        return super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
         return true;
     }
 
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-//        Log.d(TAG, "onNestedScroll");
+        Log.d(TAG, "onNestedScroll");
         if (dyConsumed > 0) {
             mScale = Math.max(0, mScale - ((float) dyConsumed) / STROKE);
         } else {
             mScale = Math.min(1, mScale - ((float) dyConsumed) / STROKE);
+            child.setVisibility(View.VISIBLE);
         }
         child.setScaleX(mScale);
         child.setScaleY(mScale);
@@ -47,15 +47,27 @@ public class ScaleBehavior extends CoordinatorLayout.Behavior {
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target) {
         super.onStopNestedScroll(coordinatorLayout, child, target);
+        if (mScale == 0) {
+            child.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public boolean onNestedFling(CoordinatorLayout coordinatorLayout, View child, View target, float velocityX, float velocityY, boolean consumed) {
-//        Log.d(TAG, "onNestedFling");
-        int endScale = velocityY > 0 ? 0 : 1;
-        child.animate().scaleX(endScale).setDuration((long) (INIT_SCALE_DURATION * mScale)).start();
-        child.animate().scaleY(endScale).setDuration((long) (INIT_SCALE_DURATION * mScale)).start();
-        mScale = endScale;
+    public boolean onNestedFling(CoordinatorLayout coordinatorLayout, final View child, View target, float velocityX, float velocityY, boolean consumed) {
+        Log.d(TAG, "onNestedFling");
+        final int endScale = velocityY > 0 ? 0 : 1;
+        ViewCompat.animate(child).scaleX(endScale).setDuration((long) (INIT_SCALE_DURATION * mScale))
+                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        mScale = endScale;
+                        if (mScale == 0) {
+                            child.setVisibility(View.GONE);
+                        }
+                    }
+                })
+                .start();
+        ViewCompat.animate(child).scaleY(endScale).setDuration((long) (INIT_SCALE_DURATION * mScale)).start();
         return true;
     }
 }
