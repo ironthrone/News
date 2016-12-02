@@ -134,7 +134,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) { 
         switch (id) {
             case NEWS_LOADER:
                 return new CursorLoader(this, ContentEntity.buildContentWithIdUri(mContentId),

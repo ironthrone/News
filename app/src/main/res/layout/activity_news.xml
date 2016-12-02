@@ -25,6 +25,7 @@
             <ImageView
                 android:id="@+id/news_image"
                 android:transitionName="@string/transition_share_image"
+                android:contentDescription="@string/this_is_news_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"

@@ -43,4 +43,5 @@
     <string name="share">Share</string>
     <string name="appwidget_setting_description">Change the section shown in the widget</string>
     <string name="share_chooser_title">Share the news to</string>
+    <string name="this_is_news_image">This is news image</string>
 </resources>
