@@ -1,6 +1,19 @@
 <resources>
 
+    <style name="AppTheme.Main" parent="AppTheme" >
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
     <style name="AppTheme.TransparentStatusBar" parent="AppTheme" >
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+    <style name="AppTheme.NewsDetail" parent="AppTheme.TransparentStatusBar">
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        //not work
+        <!--<item name="android:windowReturnTransition">@transition/news_detail_return</item>-->
     </style>
 </resources>

@@ -9,6 +9,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.TransparentStatusBar" parent="AppTheme" >
+    <style name="AppTheme.Main" parent="AppTheme" />
+    <style name="AppTheme.TransparentStatusBar" parent="AppTheme" />
+
+    <style name="AppTheme.NewsDetail" parent="AppTheme.TransparentStatusBar">
     </style>
 </resources>
