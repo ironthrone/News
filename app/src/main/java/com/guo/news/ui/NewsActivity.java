@@ -220,5 +220,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         Intent intent = new Intent(NewsActivity.this, CommentActivity.class);
         intent.putExtra(CommentActivity.KEY_CONTENT_ID, mContentId);
         startActivity(intent);
+        overridePendingTransition(R.anim.bottom_to_up,android.R.anim.fade_out);
     }
 }
