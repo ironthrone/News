@@ -96,14 +96,19 @@ public class CommentActivity extends AppCompatActivity {
                     }).setNegativeButton("Abandon", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
+                    finishWithAnimation();
                 }
             }).show();
         } else {
-            finish();
+            finishWithAnimation();
         }
     }
 
+    private void finishWithAnimation() {
+
+            finish();
+                    overridePendingTransition(0,R.anim.up_to_bottom);
+    }
     @OnClick(R.id.publish)
     public void onClick(View v) {
         switch (v.getId()) {
