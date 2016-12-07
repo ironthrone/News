@@ -45,7 +45,7 @@ import rx.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor>,NewsListAdapter.OnItemClickListener {
+        LoaderManager.LoaderCallbacks<Cursor>, NewsListAdapter.OnItemClickListener {
 
 
     private static final String KEY_SECTION_ID = "section_id";
@@ -111,7 +111,7 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     Toast.makeText(getContext(), "there is'nt  value", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                if (Utility.insertContents(getContext(),contentModels) < 0) {
+                                if (Utility.insertContents(getContext(), contentModels) < 0) {
                                     Log.d(TAG, "load more insert fail");
                                 }
                             }
@@ -143,10 +143,10 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
         ButterKnife.bind(this, view);
         swipe_refresh.setOnRefreshListener(this);
 
-        mAdapter = new NewsListAdapter(getContext(), null,this);
+        mAdapter = new NewsListAdapter(getContext(), null, this);
         recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler_view.setAdapter(mAdapter);
-        recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(),DIVIDER_HEIGHT)));
+        recycler_view.addItemDecoration(new DividerItemDecoration(MeasureConverter.dip2px(getContext(), DIVIDER_HEIGHT)));
         recycler_view.addOnScrollListener(mLoadMoreListener);
     }
 
@@ -183,7 +183,6 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                 });
     }
-
 
 
     @Override
@@ -223,12 +222,15 @@ public class NewsListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onItemClick(NewsListAdapter.ViewHolder holder, String contentId) {
+    public void onItemClick(RecyclerView.ViewHolder holder, String contentId) {
         Intent intent = new Intent(getContext(), NewsActivity.class);
         intent.putExtra(NewsActivity.KEY_CONTENT_ID, contentId);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), holder.image, getString(R.string.transition_share_image));
-        startActivity(intent,options.toBundle());
-
+        ActivityOptionsCompat options;
+        if (holder instanceof NewsListAdapter.ViewHolder) {
+            options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), ((NewsListAdapter.ViewHolder) holder).image, getString(R.string.transition_share_image));
+        } else {
+            options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
+        }
+        startActivity(intent, options.toBundle());
     }
-
 }

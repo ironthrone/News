@@ -2,7 +2,9 @@ package com.guo.news.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -13,10 +15,12 @@ import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +31,7 @@ import com.guo.news.data.model.CommentModel;
 import com.guo.news.data.remote.ResultTransformer;
 import com.guo.news.data.remote.ServiceHost;
 import com.guo.news.ui.adapter.CommentAdapter;
+import com.guo.news.ui.widget.AbstractTransitionListener;
 import com.guo.news.ui.widget.AsyncImageGetter;
 import com.guo.news.util.Utility;
 import com.squareup.picasso.Picasso;
@@ -46,6 +51,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int NEWS_LOADER = 100;
     private static final int COMMENTS_LOADER = 200;
     private static final String TAG = NewsActivity.class.getSimpleName();
+    @Bind(R.id.app_bar)
+    AppBarLayout app_bar;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.news_image)
@@ -65,6 +72,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private CommentAdapter mCommentAdapter;
     private ShareActionProvider mShareActionProvider;
     private String mShareUrl;
+    private boolean mRevealed;
 
 
     @Override
@@ -72,22 +80,36 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         ButterKnife.bind(this);
-
         mContentId = getIntent().getStringExtra(KEY_CONTENT_ID);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         comment_list.setLayoutManager(new LinearLayoutManager(this));
         mCommentAdapter = new CommentAdapter(this, null);
         comment_list.setAdapter(mCommentAdapter);
 
-        mShareActionProvider = new ShareActionProvider(this){
+        mShareActionProvider = new ShareActionProvider(this) {
             @Override
             public View onCreateActionView() {
                 return null;
             }
         };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getEnterTransition().addListener(new AbstractTransitionListener() {
+                @Override
+                public void onTransitionStart(Transition transition) {
+                    if (!mRevealed) {
+
+                        int centerX = app_bar.getWidth() / 2;
+                        int centerY = app_bar.getHeight() / 2;
+                        double endRadius = Math.hypot(centerX, centerY);
+                        ViewAnimationUtils.createCircularReveal(app_bar, centerX, centerY, 0, ((float) endRadius)).start();
+                    }
+                }
+            });
+        }
 
         loadData();
     }
@@ -131,7 +153,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) { 
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case NEWS_LOADER:
                 return new CursorLoader(this, ContentEntity.buildContentWithIdUri(mContentId),
@@ -220,6 +242,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         Intent intent = new Intent(NewsActivity.this, CommentActivity.class);
         intent.putExtra(CommentActivity.KEY_CONTENT_ID, mContentId);
         startActivity(intent);
-        overridePendingTransition(R.anim.bottom_to_up,android.R.anim.fade_out);
+        overridePendingTransition(R.anim.bottom_to_up, android.R.anim.fade_out);
     }
 }

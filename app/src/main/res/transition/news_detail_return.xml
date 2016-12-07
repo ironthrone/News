@@ -8,7 +8,7 @@
             <target android:targetId="@id/app_bar" />
         </targets>
     </slide>
-    <slide android:slideEdge="bottom" >
+    <slide android:slideEdge="bottom" android:startDelay="100">
         <targets>
             <target android:targetId="@id/slide_bottom" />
         </targets>

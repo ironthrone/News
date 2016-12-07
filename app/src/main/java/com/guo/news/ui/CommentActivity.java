@@ -106,8 +106,8 @@ public class CommentActivity extends AppCompatActivity {
 
     private void finishWithAnimation() {
 
-            finish();
-                    overridePendingTransition(0,R.anim.up_to_bottom);
+        finish();
+        overridePendingTransition(0, R.anim.up_to_bottom);
     }
     @OnClick(R.id.publish)
     public void onClick(View v) {

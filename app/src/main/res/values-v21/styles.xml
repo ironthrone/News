@@ -15,7 +15,7 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
 
         //default transition framework provider inverse transition
-        <!--<item name="android:windowReturnTransition">@transition/news_detail_return</item>-->
+        <item name="android:windowReturnTransition">@transition/news_detail_return</item>
         <item name="android:windowEnterTransition">@transition/news_detail_enter</item>
     </style>
 </resources>
