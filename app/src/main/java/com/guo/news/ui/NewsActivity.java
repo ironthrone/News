@@ -96,21 +96,20 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 return null;
             }
         };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                    @Override
-                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                        v.removeOnLayoutChangeListener(this);
-                        int centerX = app_bar.getWidth() / 2;
-                        int centerY = app_bar.getHeight() / 2;
-                        double endRadius = Math.hypot(centerX, centerY);
-                        ViewAnimationUtils.createCircularReveal(app_bar, centerX, centerY, 0, ((float) endRadius)).start();
-
-                    }
-                });
-        }
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//
+//                getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                    @Override
+//                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                        v.removeOnLayoutChangeListener(this);
+//                        int centerX = app_bar.getWidth() / 2;
+//                        int centerY = app_bar.getHeight() / 2;
+//                        double endRadius = Math.hypot(centerX, centerY);
+//                        ViewAnimationUtils.createCircularReveal(app_bar, centerX, centerY, 0, ((float) endRadius)).start();
+//
+//                    }
+//                });
+//        }
 
         loadData();
     }
